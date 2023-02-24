@@ -1,0 +1,62 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot.commands;
+
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.subsystems.Drivetrain;
+
+public class QuickTurn extends CommandBase {
+  private final Drivetrain drivetrain;
+  private final double degreesToTurn;  //the amount the robot should turn
+  double targetAngle;  //initial angle from Pigeon + degreesToTurn
+  double error;  //How incorrect the current angle is as the robot turns
+  private double startTurnTime;
+  //private final int reversed;
+  /** Creates a new QuickTurn. */
+  public QuickTurn(Drivetrain drivetrain, double degreesToTurn) {
+    this.drivetrain = drivetrain;
+    this.degreesToTurn = degreesToTurn;
+    //this.reversed = ((this.degreesToTurn < 0)?-1:1);
+    addRequirements(drivetrain);
+    // Use addRequirements() here to declare subsystem dependencies.
+  }
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    startTurnTime = Timer.getFPGATimestamp();
+    this.targetAngle = degreesToTurn + drivetrain.getYaw();
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    error = targetAngle - drivetrain.getYaw();
+    double value = error * Constants.PIGEON_TURN_KP;
+    if (Math.abs(value) > 0.5)  {  //max power for turning
+      value = Math.copySign(0.5, value);
+    }
+    if (Math.abs(value) < 0.15) { //min power for turning
+      value = Math.copySign(0.15, value);
+    }
+    System.out.println("Turn to Angle (aka QuickTurn) Error: " + error);
+    System.out.println("Turning Value: " + value);
+    drivetrain.tankDrive(value, -value);  //drive with calculated values(speeds)
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    drivetrain.stop();
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return (Math.abs(error)) < Constants.QUICKTURN_THRESHOLD_DEGREES || Timer.getFPGATimestamp() - startTurnTime > 2;
+  }
+}
