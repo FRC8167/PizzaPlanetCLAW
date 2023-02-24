@@ -75,7 +75,7 @@ public class Pivot extends SubsystemBase {
 
     public void setPivotMotionMagic(double targetRotations) {
       double targetTicks = targetRotations * 20 * 2048;
-      double horizontalHoldOutput = 0.4;
+      double horizontalHoldOutput = 0.3;
       //double arbFeedFwdTerm = getFeedForward(horizontalHoldOutput);
       //pivotMotor.set(TalonFXControlMode.MotionMagic, targetTicks);
       //pivotMotor.set(TalonFXControlMode.MotionMagic, targetTicks, DemandType.ArbitraryFeedForward, arbFeedFwdTerm);
