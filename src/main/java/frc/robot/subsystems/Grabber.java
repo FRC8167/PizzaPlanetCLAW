@@ -11,41 +11,38 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Grabber extends SubsystemBase {
-  private boolean isOpen;
-  private DoubleSolenoid grabberPiston;
-  /** Creates a new Grabber. */
-  public Grabber() {
-    grabberPiston = 
-    new DoubleSolenoid(0, PneumaticsModuleType.CTREPCM, Constants.SOLENOID_ID1, Constants.SOLENOID_ID2);
-    isOpen = false;
-  }
-
-  //Methods for controlling the state of the double solenoid
-
-  public void openGrabber() {
-    grabberPiston.set(Value.kReverse);
-    isOpen = true;
-  }
-
-  public void closeGrabber() {
-    grabberPiston.set(Value.kForward);
-    isOpen = false;
-  }
-
-  public void toggle() {
-    //Toggle the stat of bothh solenoids and gripper
-    if (isOpen) {
-      closeGrabber();
-    } else {
-      openGrabber();
+    private boolean isOpen;
+    private DoubleSolenoid grabberPiston;
+    /** Creates a new Grabber. */
+    public Grabber() {
+        grabberPiston = 
+        new DoubleSolenoid(0, PneumaticsModuleType.CTREPCM, Constants.SOLENOID_ID1, Constants.SOLENOID_ID2);
+        isOpen = false;
     }
-  }
-
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
-
-  
+    
+    //Methods for controlling the state of the double solenoid
+    
+    public void openGrabber() {
+        grabberPiston.set(Value.kReverse);
+        isOpen = true;
+    }
+    
+    public void closeGrabber() {
+        grabberPiston.set(Value.kForward);
+        isOpen = false;
+    }
+    
+    public void toggle() {
+        //Toggle the stat of bothh solenoids and gripper
+        if (isOpen) {
+            closeGrabber();
+        } else {
+            openGrabber();
+        }
+    }
+    
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
 }
