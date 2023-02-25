@@ -11,6 +11,7 @@ import frc.robot.commands.SetPivotAngle;
 import frc.robot.subsystems.Arm;
 //import frc.robot.commands.Autos;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Pivot;
 
 // import java.lang.ModuleLayer.Controller;
@@ -35,7 +36,7 @@ public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
   private final Arm arm = new Arm();
   private final Pivot pivot = new Pivot();
-  //private final Grabber grabber = new Grabber();
+  private final Grabber grabber = new Grabber();
   //private final Vision vision = new Vision();
 
   private final SendableChooser<Command> autoCommandSelector = new SendableChooser<>();
@@ -77,7 +78,7 @@ public class RobotContainer {
     // cancelling on release.
   
     //Driver Buttons
-    //driverController.leftBumper().onTrue(new InstantCommand(() -> grabber.toggle()));
+    operatorController.leftBumper().onTrue(new InstantCommand(() -> grabber.toggle()));
     //driverController.x().onTrue(new QuickTurn(drivetrain, 90));
     //driverController.y().onTrue(new QuickTurn(drivetrain, 180));
     //driverController.a().whileTrue(new TurnToTrackedTarget(drivetrain, vision, Constants.TRACK_TAG_ROTATION_KP));
@@ -97,13 +98,13 @@ public class RobotContainer {
     //MANUAL CONTROL OF PIVOT ARM
     //add a button to move forward
     //add a button to move backward  use Constants,PIVOT_POWER for speed
-    operatorController.pov(0).onTrue(new SetPivotAngle(pivot, 3.0));  //extend
-    operatorController.pov(180).onTrue(new SetPivotAngle(pivot, 0));  //retract
+    driverController.a().onTrue(new SetPivotAngle(pivot, 10.0));  //extend
+    driverController.b().onTrue(new SetPivotAngle(pivot, 0));  //retract
     //MANUAL ZERO ARM SENSOR
-    operatorController.y().onTrue(new InstantCommand(() -> pivot.zeroPivotSensor()));
-    //MANUAL CONTROL OF TELESCOPING ARM
-    operatorController.leftBumper().whileTrue(new StartEndCommand(() -> pivot.testPivot(Constants.PIVOT_POWER), () -> pivot.stop()));
-    operatorController.rightBumper().whileTrue(new StartEndCommand(() -> pivot.testPivot(-Constants.PIVOT_POWER), () -> pivot.stop()));
+    driverController.x().onTrue(new InstantCommand(() -> pivot.zeroPivotSensor()));
+    //MANUAL CONTROL OF PIVOT MOTOR
+    driverController.leftTrigger().whileTrue(new StartEndCommand(() -> pivot.testPivot(Constants.PIVOT_POWER), () -> pivot.stop()));
+    driverController.rightTrigger().whileTrue(new StartEndCommand(() -> pivot.testPivot(-Constants.PIVOT_POWER), () -> pivot.stop()));
 
 
 

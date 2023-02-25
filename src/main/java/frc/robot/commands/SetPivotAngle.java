@@ -4,14 +4,14 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Pivot;
 
 public class SetPivotAngle extends CommandBase {
   private final Pivot pivot;
   private final double pivotTarget;
-  private double pivotStartTime;
+  //private double pivotStartTime;
   /** Creates a new SetPivotAngle. */
   public SetPivotAngle(Pivot pivot, double pivotTarget) {
     this.pivot = pivot;
@@ -24,7 +24,7 @@ public class SetPivotAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pivotStartTime = Timer.getFPGATimestamp();
+   // pivotStartTime = Timer.getFPGATimestamp();
     // pivot.zeroPivotSensor();
     pivot.setPivotMotionMagic(pivotTarget);
   }
@@ -48,12 +48,12 @@ public class SetPivotAngle extends CommandBase {
       return true;
     }
 
-    double timePassed = Timer.getFPGATimestamp() - pivotStartTime;
-    if (timePassed > 7) {   /////check the time needed for this
-      return true;
-    }
+    // double timePassed = Timer.getFPGATimestamp() - pivotStartTime;
+    // if (timePassed > 7) {   /////check the time needed for this
+    //   return true;
+    // }
 
-    System.out.println("Pivot Percent Error= " + percentErr + ",time passed= " + timePassed);
+    System.out.println("Pivot Percent Error= " + percentErr);// + ",time passed= " + timePassed);
     
     return false;
   }

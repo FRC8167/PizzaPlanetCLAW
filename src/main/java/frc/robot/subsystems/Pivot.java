@@ -74,12 +74,12 @@ public class Pivot extends SubsystemBase {
     }
 
     public void setPivotMotionMagic(double targetRotations) {
-      double targetTicks = targetRotations * 20 * 2048;
-      double horizontalHoldOutput = 0.3;
-      //double arbFeedFwdTerm = getFeedForward(horizontalHoldOutput);
+      double targetTicks = targetRotations * 80 * 2048;
+      double horizontalHoldOutput = 0.13;
+      double arbFeedFwdTerm = getFeedForward(horizontalHoldOutput);
       //pivotMotor.set(TalonFXControlMode.MotionMagic, targetTicks);
-      //pivotMotor.set(TalonFXControlMode.MotionMagic, targetTicks, DemandType.ArbitraryFeedForward, arbFeedFwdTerm);
-      pivotMotor.set(TalonFXControlMode.MotionMagic, targetTicks, DemandType.ArbitraryFeedForward, horizontalHoldOutput);
+      pivotMotor.set(TalonFXControlMode.MotionMagic, targetTicks, DemandType.ArbitraryFeedForward, arbFeedFwdTerm);
+      //pivotMotor.set(TalonFXControlMode.MotionMagic, targetTicks, DemandType.ArbitraryFeedForward, horizontalHoldOutput);
 
       //Display PID Commanded Target and Resulting Error
       StringBuilder pivotmoreinfo = new StringBuilder();
@@ -111,8 +111,8 @@ public class Pivot extends SubsystemBase {
 
     private double getFeedForward(double horizontalHoldOutput) {
       double pivotSensorPosition = pivotMotor.getSelectedSensorPosition(0);
-      double pivotCurrentAngle = Math.toRadians(pivotSensorPosition*360/2048);  //lowest position is 0 via sensor; needs 45 deg offset
-      double theta = Math.toRadians((90 - (pivotCurrentAngle + 45)));  //angle of elevation for arm; 90 is max hold
+      double pivotCurrentAngle = (pivotSensorPosition*360/2048);  //lowest position is 0 via sensor; needs 45 deg offset
+      double theta = Math.toRadians(90 - (pivotCurrentAngle + 45));  //angle of elevation for arm; 90 is max hold
       double gravityCompensation = Math.cos(theta);
       double arbFeedFwd = gravityCompensation * horizontalHoldOutput;
       return arbFeedFwd;

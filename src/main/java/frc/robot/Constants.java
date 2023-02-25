@@ -53,8 +53,9 @@ public static final double ARM_36_INCHES = 36.0;  //inches    ****PLACEHOLDER
 
 //Vision Constants
 public static final String USB_CAMERA_NAME = "Microsoft_LifeCam_HD-3000";
+
 public static final int SOLENOID_ID1 = 0;
-public static final int SOLENOID_ID2 = 0;
+public static final int SOLENOID_ID2 = 1;
 
 
 //Arm Pivot Constants
