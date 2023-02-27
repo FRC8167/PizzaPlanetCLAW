@@ -46,8 +46,10 @@ public void configMotors(){
   leftBack.follow(leftFront);
   rightBack.follow(rightFront);
 
-  leftBack.setInverted(true);
-  leftFront.setInverted(true);
+  leftBack.setInverted(false);
+  leftFront.setInverted(false);
+  rightBack.setInverted(true);
+  rightFront.setInverted(true);
 
   leftFront.configOpenloopRamp(0.5);
   rightFront.configOpenloopRamp(0.5);
@@ -147,6 +149,30 @@ public void stopDriveMotionMagic() {
   drivetrain.setSafetyEnabled(true);
 }
 
+public void setTurnMotionMagic(double distance, double maxvelocity, double maxAcceleration) {
+  drivetrain.setSafetyEnabled(false);
+
+  leftFront.getSensorCollection().setIntegratedSensorPosition(0, 30);
+  leftFront.getSensorCollection().setIntegratedSensorPosition(0, 30);
+
+  rightFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT);
+  leftFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT);
+
+  rightFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT);
+  leftFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT);
+
+  rightFront.set(ControlMode.MotionMagic, -distance);  //opposite signs to cause rotation
+  leftFront.set(ControlMode.MotionMagic, distance);
+  
+}
+
+public void stopTurnMotionMagic() {
+leftFront.set(ControlMode.PercentOutput, 0);
+rightFront.set(ControlMode.PercentOutput, 0);
+
+drivetrain.setSafetyEnabled(true);
+}
+
 @Override
 public void periodic() {
 
@@ -157,6 +183,13 @@ public boolean isDriveMagicMotionDone(double distanceTicks) {
   double percentError = 100*(-distanceTicks - sensorDistance) / -distanceTicks;
   return (distanceTicks <14000 && percentError <5) || percentError <1;  //where did the 14000 come from?
 }
+
+public boolean isTurnMagicMotionDone(double distanceTicks) {
+  double sensorDistance = rightFront.getSelectedSensorPosition(0);
+  double percentError = 100*(-distanceTicks - sensorDistance) / -distanceTicks;
+  return (distanceTicks <14000 && percentError <5) || percentError <1;  //where did the 14000 come from?
+}
+
   
   }
 

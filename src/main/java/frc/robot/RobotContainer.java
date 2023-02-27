@@ -6,6 +6,7 @@ package frc.robot;
 
 //import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.RotateAngle;
 import frc.robot.commands.SetArmDistance;
 import frc.robot.commands.SetPivotAngle;
 import frc.robot.subsystems.Arm;
@@ -20,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+//import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 //import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -77,11 +79,10 @@ public class RobotContainer {
         // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
   
-    //Driver Buttons
+    //GRABBER TOGGLE
     operatorController.leftBumper().onTrue(new InstantCommand(() -> grabber.toggle()));
-    //driverController.x().onTrue(new QuickTurn(drivetrain, 90));
-    //driverController.y().onTrue(new QuickTurn(drivetrain, 180));
-    //driverController.a().whileTrue(new TurnToTrackedTarget(drivetrain, vision, Constants.TRACK_TAG_ROTATION_KP));
+
+    
 
     //Operator Buttons
 
@@ -93,27 +94,37 @@ public class RobotContainer {
     //MANUAL CONTROL OF TELESCOPING ARM
     operatorController.leftTrigger().whileTrue(new StartEndCommand(() -> arm.testArm(Constants.ARM_POWER), () -> arm.stop()));
     operatorController.rightTrigger().whileTrue(new StartEndCommand(() -> arm.testArm(-Constants.ARM_POWER), () -> arm.stop()));
+    
+
+
+    //DRIVER CONTROLLER
+    driverController.povRight().onTrue(new RotateAngle(drivetrain, 90));
+    driverController.povDown().onTrue(new RotateAngle(drivetrain, 180));
+    //driverController.a().whileTrue(new TurnToTrackedTarget(drivetrain, vision, Constants.TRACK_TAG_ROTATION_KP));
+
+    //AUTO ROTATE PIVOT MOTOR
+    driverController.a().onTrue(new SetPivotAngle(pivot, 10.0));  //raise arm (degrees)
+    driverController.b().onTrue(new SetPivotAngle(pivot, 0));  //return arm to base position
     //MANUAL ZERO PIVOT SENSOR
-    //add a button to do this
-    //MANUAL CONTROL OF PIVOT ARM
-    //add a button to move forward
-    //add a button to move backward  use Constants,PIVOT_POWER for speed
-    driverController.a().onTrue(new SetPivotAngle(pivot, 10.0));  //extend
-    driverController.b().onTrue(new SetPivotAngle(pivot, 0));  //retract
-    //MANUAL ZERO ARM SENSOR
     driverController.x().onTrue(new InstantCommand(() -> pivot.zeroPivotSensor()));
     //MANUAL CONTROL OF PIVOT MOTOR
     driverController.leftTrigger().whileTrue(new StartEndCommand(() -> pivot.testPivot(Constants.PIVOT_POWER), () -> pivot.stop()));
     driverController.rightTrigger().whileTrue(new StartEndCommand(() -> pivot.testPivot(-Constants.PIVOT_POWER), () -> pivot.stop()));
 
-
-
   }
 
   private void addAutoCommands() {
+    // autoCommandSelector.setDefaultOption(
+    //   "Right Side Score Cube and Move",
+    //   new SequentialCommandGroup(
+    //     new SetPivotAngle(pivot, 45.0),
+    //     new SetArmDistance(arm, 14);
+    //     new InstantCommand(() -> grabber.toggle()))
+    // );
+
     autoCommandSelector.setDefaultOption(
-    "Drive Forward 2 Sec",
-      new frc.robot.commands.DriveForwardTimed(drivetrain, 2, 0.4));
+    "Drive Forward 2 Feet",
+      new frc.robot.commands.DriveForwardDistance(drivetrain, 2));
   }
 
   /**
