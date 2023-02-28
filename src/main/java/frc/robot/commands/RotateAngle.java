@@ -27,7 +27,7 @@ public class RotateAngle extends CommandBase {
   public void initialize() {
     drivetrain.zeroDrivetrainEncoders();  //try this next meeting ON BLOCKS
     turnStartTime = Timer.getFPGATimestamp();
-    drivetrain.setTurnMotionMagic(distance, 10000, 4000);
+    drivetrain.setTurnMotionMagic(distance, 10000*0.5, 0.5*4000);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

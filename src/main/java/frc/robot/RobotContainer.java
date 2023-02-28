@@ -6,9 +6,15 @@ package frc.robot;
 
 //import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.ChargingStationAutoBalance;
+import frc.robot.commands.DriveForwardDistance;
+//import frc.robot.commands.FloorPickupPositioning;
 import frc.robot.commands.RotateAngle;
+// import frc.robot.commands.ScoreCubeAutonomous;
+// import frc.robot.commands.SecondShelfPositioning;
 import frc.robot.commands.SetArmDistance;
 import frc.robot.commands.SetPivotAngle;
+// import frc.robot.commands.ToggleGrabberNGo;
 import frc.robot.subsystems.Arm;
 //import frc.robot.commands.Autos;
 import frc.robot.subsystems.Drivetrain;
@@ -21,7 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-//import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 //import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -101,7 +107,7 @@ public class RobotContainer {
     driverController.povRight().onTrue(new RotateAngle(drivetrain, 90));
     driverController.povDown().onTrue(new RotateAngle(drivetrain, 180));
     //driverController.a().whileTrue(new TurnToTrackedTarget(drivetrain, vision, Constants.TRACK_TAG_ROTATION_KP));
-
+    driverController.povLeft().whileTrue(new ChargingStationAutoBalance(drivetrain));
     //AUTO ROTATE PIVOT MOTOR
     driverController.a().onTrue(new SetPivotAngle(pivot, 10.0));  //raise arm (degrees)
     driverController.b().onTrue(new SetPivotAngle(pivot, 0));  //return arm to base position
@@ -114,18 +120,31 @@ public class RobotContainer {
   }
 
   private void addAutoCommands() {
-    // autoCommandSelector.setDefaultOption(
-    //   "Right Side Score Cube and Move",
-    //   new SequentialCommandGroup(
-    //     new SetPivotAngle(pivot, 45.0),
-    //     new SetArmDistance(arm, 14);
-    //     new InstantCommand(() -> grabber.toggle()))
-    // );
 
     autoCommandSelector.setDefaultOption(
     "Drive Forward 2 Feet",
       new frc.robot.commands.DriveForwardDistance(drivetrain, 2));
+
+
+    // autoCommandSelector.addOption(
+    //   "Right Side Score Cube and Move",
+    //   new SequentialCommandGroup(
+    //     new ScoreCubeAutonomous(),
+    //     new RotateAngle(drivetrain, 180),
+    //     new DriveForwardDistance(drivetrain, 225.081/12.0),
+    //     new RotateAngle(drivetrain, 11.55),
+    //     new FloorPickupPositioning(),
+    //     new ToggleGrabberNGo(),
+    //     new RotateAngle(drivetrain, 180),
+    //     new DriveForwardDistance(drivetrain, 170.0/12),
+    //     new SecondShelfPositioning(),
+    //     new ToggleGrabberNGo(),
+    //     new RotateAngle(drivetrain, 180)
+    // )
+    // );
+  
   }
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

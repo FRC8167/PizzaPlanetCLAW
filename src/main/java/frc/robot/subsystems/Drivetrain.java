@@ -9,7 +9,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-//import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,13 +19,13 @@ public class Drivetrain extends SubsystemBase {
   /** Creates a new Drivetrain. */
 
     private WPI_TalonFX leftFront = new WPI_TalonFX(Constants.LEFT_FRONT);
-    private WPI_TalonFX rightFront = new WPI_TalonFX(Constants.RIGHT_FRONT);
+    public WPI_TalonFX rightFront = new WPI_TalonFX(Constants.RIGHT_FRONT);
     private WPI_TalonFX leftBack = new WPI_TalonFX(Constants.LEFT_BACK);
     private WPI_TalonFX rightBack = new WPI_TalonFX(Constants.RIGHT_BACK);
 
     private DifferentialDrive drivetrain = new DifferentialDrive(leftFront, rightFront);
 
-      //private Pigeon2 pigeon = new Pigeon2(Constants.PIGEON_CANID);
+    private Pigeon2 pigeon = new Pigeon2(Constants.PIGEON_CANID);
 
     public Drivetrain() {
       configMotors();
@@ -93,37 +93,37 @@ public void configMotors(){
 }
 
 public void arcadeDrive(double throttle, double rotation) {
-    drivetrain.arcadeDrive(throttle, rotation);
+    drivetrain.arcadeDrive(-throttle, rotation);
 
 }
 
 public void tankDrive(double leftSpeed, double rightSpeed) {
-    drivetrain.tankDrive(leftSpeed, rightSpeed);
+    drivetrain.tankDrive(-leftSpeed, -rightSpeed);
 }
 
 public void driveForward(double speed) {  
-  drivetrain.tankDrive(speed, speed);
+  drivetrain.tankDrive(-speed, -speed);
 }
 
 public void stop() {
     drivetrain.stopMotor();
 }
 
-// public void zeroPigeon(double reset) {
-//   pigeon.setYaw(reset);
-// }
+public void zeroPigeon(double reset) {
+  pigeon.setYaw(reset);
+}
 
-// public double getYaw() {
-//       return pigeon.getYaw();
-// }
+public double getYaw() {
+      return pigeon.getYaw();
+}
 
-// public double getPitch() {
-//   return pigeon.getPitch();
-// }
+public double getPitch() {
+  return pigeon.getPitch();
+}
 
-// public double getRoll() {
-//   return pigeon.getRoll();
-// }
+public double getRoll() {
+  return pigeon.getRoll();
+}
 
 public void setDriveMotionMagic(double distance, double maxvelocity, double maxAcceleration) {
     drivetrain.setSafetyEnabled(false);
@@ -137,7 +137,7 @@ public void setDriveMotionMagic(double distance, double maxvelocity, double maxA
     rightFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT);
     leftFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT);
 
-    rightFront.set(ControlMode.MotionMagic, -distance);  //why is this negative??
+    rightFront.set(ControlMode.MotionMagic, -distance);  //why is this negative
     leftFront.set(ControlMode.MotionMagic, -distance);
     
 }
@@ -161,8 +161,8 @@ public void setTurnMotionMagic(double distance, double maxvelocity, double maxAc
   rightFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT);
   leftFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT);
 
-  rightFront.set(ControlMode.MotionMagic, -distance);  //opposite signs to cause rotation
-  leftFront.set(ControlMode.MotionMagic, distance);
+  rightFront.set(ControlMode.MotionMagic, distance);  //opposite signs to cause rotation
+  leftFront.set(ControlMode.MotionMagic, -distance);
   
 }
 
@@ -184,10 +184,17 @@ public boolean isDriveMagicMotionDone(double distanceTicks) {
   return (distanceTicks <14000 && percentError <5) || percentError <1;  //where did the 14000 come from?
 }
 
-public boolean isTurnMagicMotionDone(double distanceTicks) {
-  double sensorDistance = rightFront.getSelectedSensorPosition(0);
-  double percentError = 100*(-distanceTicks - sensorDistance) / -distanceTicks;
-  return (distanceTicks <14000 && percentError <5) || percentError <1;  //where did the 14000 come from?
+
+public double getLeadRightSensorPosition() {
+  return rightFront.getSelectedSensorPosition(0);
+}
+
+
+public void zeroDrivetrainEncoders() {
+  leftFront.setSelectedSensorPosition(0);
+  leftBack.setSelectedSensorPosition(0);
+  rightFront.setSelectedSensorPosition(0);
+  rightBack.setSelectedSensorPosition(0);
 }
 
   

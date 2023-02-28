@@ -27,9 +27,12 @@ public class ChargingStationAutoBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.currentPitchAngle = drivetrain.getPitch();
-    error = Constants.BALANCE_GOAL_DEGREE - currentPitchAngle;
-    drivePower = Math.min(Constants.BALANCE_KP * error, 1);
+    this.currentPitchAngle = -drivetrain.getPitch();
+    error = currentPitchAngle - Constants.BALANCE_GOAL_DEGREE ;
+    drivePower = Math.min(0.025 * error, 1);  //change value once set to Constants. BALANCE_KP
+    System.out.println("Current Pitch Angle: " + currentPitchAngle);
+    System.out.println("Pitch Error: " + error);
+    System.out.println("Balancing Drive Power: " + drivePower);
 
     //Just in case more or less power is needed for a backwards approach to charging station
     //This may be required due to back/front weight imbalance
@@ -38,15 +41,12 @@ public class ChargingStationAutoBalance extends CommandBase {
     }
 
     //Limit max drivePower to reduce overhooting goal
-    if (Math.abs(drivePower) > 0.4)  {
-      drivePower = Math.copySign(0.4, drivePower);
-    }
-    drivetrain.tankDrive(drivePower, drivePower);
+    // if (Math.abs(drivePower) > 0.4)  {
+    //   drivePower = Math.copySign(0.4, drivePower);
+    // }
+    // drivetrain.tankDrive(drivePower, drivePower);
 
-    //Print error conditions
-    System.out.println("Current Pitch Angle: " + currentPitchAngle);
-    System.out.println("Pitch Error: " + error);
-    System.out.println("Balancing Drive Power: " + drivePower);
+      drivetrain.arcadeDrive(-drivePower, 0);
   }
 
   // Called once the command ends or is interrupted.
@@ -58,6 +58,6 @@ public class ChargingStationAutoBalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(error) < Constants.BALANCE_PITCH_THRESHOLD;  //this ends the autocommand;
+    return Math.abs(error) < 1.0;    ///////Make a Constant when set...Constants.BALANCE_PITCH_THRESHOLD;  //this ends the autocommand;
   }
 }
