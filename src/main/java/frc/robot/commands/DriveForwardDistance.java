@@ -35,7 +35,7 @@ public class DriveForwardDistance extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        drivetrain.stopDriveMotionMagic();
+        drivetrain.stopMotionMagic();
     }
     
     // Returns true when the command should end.

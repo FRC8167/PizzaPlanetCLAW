@@ -28,9 +28,17 @@ public final class Constants {
     public static final int PIGEON_CANID = 6;
     public static final int PIVOT_MOTOR = 7;
     
-    //Drivetrain Motion Magic Constants
+    // Drivetrain PID constants
+    // NOTE: https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/introduction-to-pid.html
+    public static final double DRIVETRAIN_PID_KF = 0.045;     // TODO: actually test this
+    public static final double DRIVETRAIN_PID_KP = 0.049;     // TODO: actually test this
+    public static final double DRIVETRAIN_PID_KI = 0.0;       // TODO: actually test this
+    public static final double DRIVETRAIN_PID_KD = 0.0;       // TODO: actually test this
+    
+    // Drivetrain Motion Magic Constants
+    public static final double DRIVETRAIN_RAMP_TIME_SECONDS = 0.5;
+    public static final int DRIVE_PID_TIMEOUT_MS = 30;
     public static final double DRIVE_CRUISE_VELOCITY = 16209; //check this
-    public static final int DRIVE_PID_TIMEOUT = 30;           //check this
     public static final double DRIVE_ACCELERATION = 16209;    //check this
     
     //
