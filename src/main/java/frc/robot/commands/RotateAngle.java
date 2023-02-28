@@ -16,7 +16,8 @@ public class RotateAngle extends CommandBase {
   /** Creates a new RotateAngle. */
   public RotateAngle(Drivetrain drivetrain, double turnAngle) {
     // Use addRequirements() here to declare subsystem dependencies.
-    distance = ((turnAngle*22*Math.PI)/360*12) * motorTicksPerFoot;  //adjust this using wheelbase
+    //distance = ((turnAngle*22*Math.PI)/360*12) * motorTicksPerFoot;  
+    distance = (((turnAngle/360)*Math.PI*22) / 12) * motorTicksPerFoot;
     this.drivetrain = drivetrain;
     addRequirements(drivetrain);
 
@@ -24,6 +25,7 @@ public class RotateAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    drivetrain.zeroDrivetrainEncoders();  //try this next meeting ON BLOCKS
     turnStartTime = Timer.getFPGATimestamp();
     drivetrain.setTurnMotionMagic(distance, 10000, 4000);
   }
@@ -38,9 +40,28 @@ public class RotateAngle extends CommandBase {
     drivetrain.stopTurnMotionMagic();
   }
 
+  private boolean isTurnMotionMagicDone() {
+    double sensorDistance = drivetrain.getLeadRightSensorPosition();
+    double error = sensorDistance - distance;
+    System.out.println(" Right Front Drive Sensor ="+ sensorDistance + ", arcLength Ticks= " + distance);
+    double percentErr = Math.abs(error)/Math.abs(distance);
+    if(percentErr < 0.01)  {
+      return true;
+    }
+    double timepassed = Timer.getFPGATimestamp() - turnStartTime;
+    if (timepassed > 3) {
+      return true;
+    }
+
+    System.out.println(" Rotate percent error = "+percentErr +", turn time passed = "+timepassed);
+
+    return false;
+  }
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Timer.getFPGATimestamp() > turnStartTime + 5 || drivetrain.isTurnMagicMotionDone(distance);
+    boolean isturnMotionDone = isTurnMotionMagicDone();
+    return isturnMotionDone;
   }
 }
