@@ -13,29 +13,29 @@ Drivetrain drivetrain;
 Vision vision;
 double visionTargetAngle;
 double visionKP;
-  /** Creates a new TurnToTrackedTarget. */
-
-  public TurnToTrackedTarget(Drivetrain drivetrain, Vision vision, double visionKP ) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    this.drivetrain = drivetrain;
-    this.vision = vision;
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    /** Creates a new TurnToTrackedTarget. */
+    
+    public TurnToTrackedTarget(Drivetrain drivetrain, Vision vision, double visionKP ) {
+        // Use addRequirements() here to declare subsystem dependencies.
+        this.drivetrain = drivetrain;
+        this.vision = vision;
+    }
+    
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {}
+    
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {}
+    
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {}
+    
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

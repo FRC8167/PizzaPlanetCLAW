@@ -9,60 +9,60 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
 public class SetArmDistance extends CommandBase {
-  /** Creates a new SetArmDistance. */
-  private final Arm arm;
-  private final double armTarget;
-  private double armStartTime;
-
-
-  public SetArmDistance(Arm arm, double armTarget) {
-    this.arm = arm;
-    //this.armTarget = armTarget;
-    this.armTarget = armTarget/(0.787*Math.PI);  //allows input of user units in inches
-    addRequirements(arm);
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    armStartTime = Timer.getFPGATimestamp();
-    //arm.zeroArmSensor();
-    arm.setArmMotionMagic(armTarget);
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    arm.stop();
-  }
-
-  private boolean isArmMotionMagicDone() {
-    double armSensorDistance = arm.getArmPosition();
-    double error = armSensorDistance - armTarget*20*2048;
-    System.out.println("Sensor ="+armSensorDistance + ", armTarget = " + (armTarget * 20 * 2048));
-    double percentErr = Math.abs(error)/Math.abs(armTarget*20*2048);
-    if(percentErr < 0.01)  {
-      return true;
+    /** Creates a new SetArmDistance. */
+    private final Arm arm;
+    private final double armTarget;
+    private double armStartTime;
+    
+    
+    public SetArmDistance(Arm arm, double armTarget) {
+        this.arm = arm;
+        //this.armTarget = armTarget;
+        this.armTarget = armTarget/(0.787*Math.PI);    //allows input of user units in inches
+        addRequirements(arm);
+        // Use addRequirements() here to declare subsystem dependencies.
     }
-    double timepassed = Timer.getFPGATimestamp() - armStartTime;
-    if (timepassed > 7) {
-      return true;
+    
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+        armStartTime = Timer.getFPGATimestamp();
+        //arm.zeroArmSensor();
+        arm.setArmMotionMagic(armTarget);
     }
-
-    System.out.println("percent error = "+percentErr +", timeepassed = "+timepassed);
-
-    return false;
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    boolean isArmMotionDone = isArmMotionMagicDone();
-    return isArmMotionDone;
-  }
+    
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {}
+    
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        arm.stop();
+    }
+    
+    private boolean isArmMotionMagicDone() {
+        double armSensorDistance = arm.getArmPosition();
+        double error = armSensorDistance - armTarget*20*2048;
+        System.out.println("Sensor ="+armSensorDistance + ", armTarget = " + (armTarget * 20 * 2048));
+        double percentErr = Math.abs(error)/Math.abs(armTarget*20*2048);
+        if(percentErr < 0.01)    {
+            return true;
+        }
+        double timepassed = Timer.getFPGATimestamp() - armStartTime;
+        if (timepassed > 7) {
+            return true;
+        }
+        
+        System.out.println("percent error = "+percentErr +", timeepassed = "+timepassed);
+        
+        return false;
+    }
+    
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        boolean isArmMotionDone = isArmMotionMagicDone();
+        return isArmMotionDone;
+    }
 }

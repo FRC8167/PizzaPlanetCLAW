@@ -19,22 +19,22 @@ import frc.robot.subsystems.Pivot;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreCubeAutonomous extends SequentialCommandGroup {
-  //private Drivetrain drivetrain;  //uncomment if adding any movement
-  private Grabber grabber;
-  private Arm arm;
-  private Pivot pivot;
-  /** Creates a new ScoreCubeAutonomous. */
-  public ScoreCubeAutonomous() {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-      new SetPivotAngle(pivot, Constants.PIVOT_ANGLE_90),
-      new SetArmDistance(arm, Constants.ARM_36_INCHES),
-      new InstantCommand(() -> grabber.openGrabber()),
-      new WaitCommand(1.0),
-      new InstantCommand(() -> grabber.closeGrabber()),
-      new SetArmDistance(arm, Constants.ARM_FULLY_RETRACTED),
-      new SetPivotAngle(pivot, Constants.PIVOT_ANGLE_0)
-      );
-  }
+    //private Drivetrain drivetrain;  //uncomment if adding any movement
+    private Grabber grabber;
+    private Arm arm;
+    private Pivot pivot;
+    /** Creates a new ScoreCubeAutonomous. */
+    public ScoreCubeAutonomous() {
+        // Add your commands in the addCommands() call, e.g.
+        // addCommands(new FooCommand(), new BarCommand());
+        addCommands(
+            new SetPivotAngle(pivot, Constants.PIVOT_ANGLE_90),
+            new SetArmDistance(arm, Constants.ARM_36_INCHES),
+            new InstantCommand(() -> grabber.openGrabber()),
+            new WaitCommand(1.0),
+            new InstantCommand(() -> grabber.closeGrabber()),
+            new SetArmDistance(arm, Constants.ARM_FULLY_RETRACTED),
+            new SetPivotAngle(pivot, Constants.PIVOT_ANGLE_0)
+        );
+    }
 }
