@@ -64,8 +64,8 @@ public class RobotContainer {
 
     drivetrain.setDefaultCommand(new ArcadeDrive(
       drivetrain, 
-      () -> driverController.getLeftY(),
-      () -> driverController.getRightX()*0.5  //change as needed
+      () -> driverController.getLeftY()*0.75,
+      () -> driverController.getRightX()*-0.6  //change as needed
     )
     );
     
@@ -93,21 +93,23 @@ public class RobotContainer {
     //Operator Buttons
 
     //EXTEND/RETRACT TELESCOPING ARM
-    operatorController.a().onTrue(new SetArmDistance(arm, 5.0));  //extend
+    operatorController.a().onTrue(new SetArmDistance(arm, 12.5));  //extend
+    // operatorController.y().onTrue(new SetArmDistance(arm, )); adds 5 inches 
     operatorController.b().onTrue(new SetArmDistance(arm, 0));  //retract
     //MANUAL ZERO ARM SENSOR
     operatorController.x().onTrue(new InstantCommand(() -> arm.zeroArmSensor()));
     //MANUAL CONTROL OF TELESCOPING ARM
     operatorController.leftTrigger().whileTrue(new StartEndCommand(() -> arm.testArm(Constants.ARM_POWER), () -> arm.stop()));
     operatorController.rightTrigger().whileTrue(new StartEndCommand(() -> arm.testArm(-Constants.ARM_POWER), () -> arm.stop()));
-    
+    //Charging station auto balance 
+    operatorController.povLeft().whileTrue(new ChargingStationAutoBalance(drivetrain));
 
 
     //DRIVER CONTROLLER
     driverController.povRight().onTrue(new RotateAngle(drivetrain, 90));
     driverController.povDown().onTrue(new RotateAngle(drivetrain, 180));
     //driverController.a().whileTrue(new TurnToTrackedTarget(drivetrain, vision, Constants.TRACK_TAG_ROTATION_KP));
-    driverController.povLeft().whileTrue(new ChargingStationAutoBalance(drivetrain));
+    // driverController.povLeft().whileTrue(new ChargingStationAutoBalance(drivetrain));
     //AUTO ROTATE PIVOT MOTOR
     driverController.a().onTrue(new SetPivotAngle(pivot, 30.0));  //raise arm (degrees)
     driverController.b().onTrue(new SetPivotAngle(pivot, 0));  //return arm to base position
@@ -122,11 +124,13 @@ public class RobotContainer {
   private void addAutoCommands() {
 
     autoCommandSelector.setDefaultOption(
-    "Drive Forward 2 Feet",
+    "Drive 2 Feet",
       new SequentialCommandGroup(
-      // new InstantCommand(()-> grabber.toggle()),
-      new frc.robot.commands.DriveForwardDistance(drivetrain, 2)));
-      // new InstantCommand(()-> grabber.toggle())));
+      new SetPivotAngle(pivot, 57),
+      new SetArmDistance(arm, Constants.ARM_SHELF1_21),
+      new InstantCommand(()-> grabber.toggle()),
+      new SetPivotAngle(pivot, 60),
+      new SetArmDistance(arm, Constants.ARM_FULLY_RETRACTED_0)));
 
 
     // autoCommandSelector.addOption(

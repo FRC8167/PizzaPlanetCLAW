@@ -81,7 +81,6 @@ public class Pivot extends SubsystemBase {
       double arbFeedFwdTerm = getFeedForward(horizontalHoldOutput);
       //pivotMotor.set(TalonFXControlMode.MotionMagic, targetTicks);
       pivotMotor.set(TalonFXControlMode.MotionMagic, targetTicks, DemandType.ArbitraryFeedForward, arbFeedFwdTerm);
-      //pivotMotor.set(TalonFXControlMode.MotionMagic, targetTicks, DemandType.ArbitraryFeedForward, horizontalHoldOutput);
 
       //Display PID Commanded Target and Resulting Error
       StringBuilder pivotmoreinfo = new StringBuilder();
