@@ -25,12 +25,15 @@ public class DriveForwardDistance extends CommandBase {
   @Override
   public void initialize() {
     driveStartTime = Timer.getFPGATimestamp();
-    drivetrain.setDriveMotionMagic(distance, 10000, 4000);
+    // drivetrain.setDriveMotionMagic(distance, 10000, 4000);
+    drivetrain.zeroDrivetrainEncoders();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    drivetrain.setDriveMotionMagic(distance, 10000, 4000);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

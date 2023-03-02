@@ -109,7 +109,7 @@ public class RobotContainer {
     //driverController.a().whileTrue(new TurnToTrackedTarget(drivetrain, vision, Constants.TRACK_TAG_ROTATION_KP));
     driverController.povLeft().whileTrue(new ChargingStationAutoBalance(drivetrain));
     //AUTO ROTATE PIVOT MOTOR
-    driverController.a().onTrue(new SetPivotAngle(pivot, 10.0));  //raise arm (degrees)
+    driverController.a().onTrue(new SetPivotAngle(pivot, 30.0));  //raise arm (degrees)
     driverController.b().onTrue(new SetPivotAngle(pivot, 0));  //return arm to base position
     //MANUAL ZERO PIVOT SENSOR
     driverController.x().onTrue(new InstantCommand(() -> pivot.zeroPivotSensor()));
@@ -123,7 +123,10 @@ public class RobotContainer {
 
     autoCommandSelector.setDefaultOption(
     "Drive Forward 2 Feet",
-      new frc.robot.commands.DriveForwardDistance(drivetrain, 2));
+      new SequentialCommandGroup(
+      // new InstantCommand(()-> grabber.toggle()),
+      new frc.robot.commands.DriveForwardDistance(drivetrain, 2)));
+      // new InstantCommand(()-> grabber.toggle())));
 
 
     // autoCommandSelector.addOption(

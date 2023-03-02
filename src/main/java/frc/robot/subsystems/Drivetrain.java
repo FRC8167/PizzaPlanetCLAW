@@ -89,6 +89,13 @@ public void configMotors(){
   rightFront.setSelectedSensorPosition(0);
   leftBack.setSelectedSensorPosition(0);
   rightBack.setSelectedSensorPosition(0);
+  leftFront.setSensorPhase(false);
+  
+  rightFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT);
+  leftFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT);
+
+  rightFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT);
+  leftFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT);
 
 }
 
@@ -128,17 +135,17 @@ public double getRoll() {
 public void setDriveMotionMagic(double distance, double maxvelocity, double maxAcceleration) {
     drivetrain.setSafetyEnabled(false);
 
-    leftFront.getSensorCollection().setIntegratedSensorPosition(0, 30);
-    leftFront.getSensorCollection().setIntegratedSensorPosition(0, 30);
+    // leftFront.getSensorCollection().setIntegratedSensorPosition(0, 30);
+    // rightFront.getSensorCollection().setIntegratedSensorPosition(0, 30);
 
-    rightFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT);
-    leftFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT);
+    // rightFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT);
+    // leftFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT);
 
-    rightFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT);
-    leftFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT);
+    // rightFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT);
+    // leftFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT);
 
-    rightFront.set(ControlMode.MotionMagic, -distance);  //why is this negative
-    leftFront.set(ControlMode.MotionMagic, -distance);
+    rightFront.set(ControlMode.MotionMagic, distance);  //why is this negative
+    leftFront.set(ControlMode.MotionMagic, distance);
     
 }
 
@@ -152,14 +159,14 @@ public void stopDriveMotionMagic() {
 public void setTurnMotionMagic(double distance, double maxvelocity, double maxAcceleration) {
   drivetrain.setSafetyEnabled(false);
 
-  leftFront.getSensorCollection().setIntegratedSensorPosition(0, 30);
-  leftFront.getSensorCollection().setIntegratedSensorPosition(0, 30);
+  // leftFront.getSensorCollection().setIntegratedSensorPosition(0, 30);
+  // leftFront.getSensorCollection().setIntegratedSensorPosition(0, 30);
 
-  rightFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT);
-  leftFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT);
+  // rightFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT);
+  // leftFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT);
 
-  rightFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT);
-  leftFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT);
+  // rightFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT);
+  // leftFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT);
 
   rightFront.set(ControlMode.MotionMagic, distance);  //opposite signs to cause rotation
   leftFront.set(ControlMode.MotionMagic, -distance);

@@ -10,16 +10,18 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+// import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Pivot extends SubsystemBase {
-  private final WPI_TalonFX pivotMotor;
+  // private final WPI_TalonFX pivotMotor;
+  private final TalonFX pivotMotor;
   /** Creates a new Pivot. */
   public Pivot() {
-    pivotMotor = new WPI_TalonFX(Constants.PIVOT_MOTOR);
+    pivotMotor = new TalonFX(Constants.PIVOT_MOTOR);
 
     configmotor();
   }
