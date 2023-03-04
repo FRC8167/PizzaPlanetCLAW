@@ -23,12 +23,12 @@ public class Grabber extends SubsystemBase {
   //Methods for controlling the state of the double solenoid
 
   public void openGrabber() {
-    grabberPiston.set(Value.kReverse);
+    grabberPiston.set(Value.kForward);
     isOpen = true;
   }
 
   public void closeGrabber() {
-    grabberPiston.set(Value.kForward);
+    grabberPiston.set(Value.kReverse);
     isOpen = false;
   }
 

@@ -8,12 +8,26 @@ package frc.robot;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ChargingStationAutoBalance;
 import frc.robot.commands.DriveForwardDistance;
+import frc.robot.commands.NestArmPivot;
+import frc.robot.commands.Pole1Positioning;
+import frc.robot.commands.Pole2Positioning;
+// import frc.robot.commands.ManualPivot;
+//import frc.robot.commands.DriveForwardDistance;
+//import frc.robot.commands.NestArmPivot;
+//import frc.robot.commands.Pole1Positioning;
+//import frc.robot.commands.Pole2Positioning;
 //import frc.robot.commands.FloorPickupPositioning;
 import frc.robot.commands.RotateAngle;
 // import frc.robot.commands.ScoreCubeAutonomous;
 // import frc.robot.commands.SecondShelfPositioning;
 import frc.robot.commands.SetArmDistance;
 import frc.robot.commands.SetPivotAngle;
+import frc.robot.commands.Shelf1Positioning;
+import frc.robot.commands.Shelf2Positioning;
+import frc.robot.commands.SubstationPositioning;
+//import frc.robot.commands.Shelf1Positioning;
+//import frc.robot.commands.Shelf2Positioning;
+//import frc.robot.commands.SubstationPositioning;
 // import frc.robot.commands.ToggleGrabberNGo;
 import frc.robot.subsystems.Arm;
 //import frc.robot.commands.Autos;
@@ -52,8 +66,8 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER);
   private final CommandXboxController operatorController = new CommandXboxController(Constants.OPERATOR_CONTROLLER);
-  
-
+  private final CommandXboxController playmakerController = new CommandXboxController(Constants.PLAYMAKER_CONTROLLER);
+//
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -64,10 +78,11 @@ public class RobotContainer {
 
     drivetrain.setDefaultCommand(new ArcadeDrive(
       drivetrain, 
-      () -> driverController.getLeftY()*0.75,
+      () -> driverController.getLeftY()*.75,
       () -> driverController.getRightX()*-0.6  //change as needed
     )
     );
+    //pivot.setDefaultCommand(new ManualPivot(pivot));
     
     }
 
@@ -85,60 +100,83 @@ public class RobotContainer {
         // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
   
-    //GRABBER TOGGLE
-    operatorController.leftBumper().onTrue(new InstantCommand(() -> grabber.toggle()));
-
+    
     
 
     //Operator Buttons
+    //GRABBER TOGGLE
+    operatorController.povCenter().onTrue(new InstantCommand(() -> grabber.toggle()));
 
     //EXTEND/RETRACT TELESCOPING ARM
     operatorController.a().onTrue(new SetArmDistance(arm, 12.5));  //extend
-    // operatorController.y().onTrue(new SetArmDistance(arm, )); adds 5 inches 
     operatorController.b().onTrue(new SetArmDistance(arm, 0));  //retract
     //MANUAL ZERO ARM SENSOR
     operatorController.x().onTrue(new InstantCommand(() -> arm.zeroArmSensor()));
-    //MANUAL CONTROL OF TELESCOPING ARM
+    // //MANUAL CONTROL OF TELESCOPING ARM
     operatorController.leftTrigger().whileTrue(new StartEndCommand(() -> arm.testArm(Constants.ARM_POWER), () -> arm.stop()));
     operatorController.rightTrigger().whileTrue(new StartEndCommand(() -> arm.testArm(-Constants.ARM_POWER), () -> arm.stop()));
-    //Charging station auto balance 
-    operatorController.povLeft().whileTrue(new ChargingStationAutoBalance(drivetrain));
+    //AUTO ROTATE PIVOT MOTOR
+    // operatorController.start().onTrue(new SetPivotAngle(pivot, 30.0));  //raise arm (degrees)
+    // operatorController.back().onTrue(new SetPivotAngle(pivot, 0.0));  //return arm to base position
+    //MANUAL ZERO PIVOT SENSOR
+    operatorController.y().onTrue(new InstantCommand(() -> pivot.zeroPivotSensor()));
+    operatorController.leftBumper().whileTrue(new StartEndCommand(() -> pivot.testPivot(Constants.PIVOT_POWER), () -> pivot.stop()));
+    operatorController.rightBumper().whileTrue(new StartEndCommand(() -> pivot.testPivot(-Constants.PIVOT_POWER), () -> pivot.stop()));
+    //MANUAL CONTROL OF PIVOT MOTOR
+    //operatorController.leftBumper().whileTrue(new ManualPivot(pivot, true) );
+    //operatorController.rightBumper().whileTrue(new ManualPivot(pivot, false));
 
 
     //DRIVER CONTROLLER
     driverController.povRight().onTrue(new RotateAngle(drivetrain, 90));
+    driverController.povLeft().onTrue(new RotateAngle(drivetrain, -90));
     driverController.povDown().onTrue(new RotateAngle(drivetrain, 180));
     //driverController.a().whileTrue(new TurnToTrackedTarget(drivetrain, vision, Constants.TRACK_TAG_ROTATION_KP));
-    // driverController.povLeft().whileTrue(new ChargingStationAutoBalance(drivetrain));
-    //AUTO ROTATE PIVOT MOTOR
-    driverController.a().onTrue(new SetPivotAngle(pivot, 30.0));  //raise arm (degrees)
-    driverController.b().onTrue(new SetPivotAngle(pivot, 0));  //return arm to base position
-    //MANUAL ZERO PIVOT SENSOR
-    driverController.x().onTrue(new InstantCommand(() -> pivot.zeroPivotSensor()));
-    //MANUAL CONTROL OF PIVOT MOTOR
-    driverController.leftTrigger().whileTrue(new StartEndCommand(() -> pivot.testPivot(Constants.PIVOT_POWER), () -> pivot.stop()));
-    driverController.rightTrigger().whileTrue(new StartEndCommand(() -> pivot.testPivot(-Constants.PIVOT_POWER), () -> pivot.stop()));
+    driverController.leftBumper().whileTrue(new ChargingStationAutoBalance(drivetrain));
+    driverController.x().onTrue(new InstantCommand(() -> drivetrain.invert_drivetrain()));
+    
+    
+
+    //PLAYMAKER CONTROLLER
+    playmakerController.povLeft().onTrue(new SetPivotAngle(pivot, 30.0));  //raise arm (degrees)
+    playmakerController.povRight().onTrue(new SetPivotAngle(pivot, 0.0));  //return arm to base position
+    playmakerController.a().onTrue(new Shelf1Positioning(arm, pivot));
+    // playmakerController.a().onTrue(new InstantCommand(() -> grabber.toggle()));
+    playmakerController.b().onTrue(new Shelf2Positioning(arm, pivot));
+    playmakerController.x().onTrue(new Pole1Positioning(arm, pivot));
+    playmakerController.y().onTrue(new Pole2Positioning(arm, pivot));
+    playmakerController.leftBumper().onTrue(new SubstationPositioning(arm, pivot));
+    playmakerController.rightBumper().onTrue(new NestArmPivot(pivot, arm));
+
+
 
   }
 
   private void addAutoCommands() {
 
     autoCommandSelector.setDefaultOption(
-    "Drive 2 Feet",
+    "Auto Right Side",
       new SequentialCommandGroup(
-      new SetPivotAngle(pivot, 57),
+      new SetPivotAngle(pivot, 85),
       new SetArmDistance(arm, Constants.ARM_SHELF1_21),
-      new InstantCommand(()-> grabber.toggle()),
-      new SetPivotAngle(pivot, 60),
-      new SetArmDistance(arm, Constants.ARM_FULLY_RETRACTED_0)));
+      new InstantCommand(()-> grabber.openGrabber()),
+      new SetPivotAngle(pivot, 85),
+      new SetArmDistance(arm, Constants.ARM_FULLY_RETRACTED_0),
+      new InstantCommand(()-> grabber.closeGrabber()),
+      new SetPivotAngle(pivot, Constants.PIVOT_ANGLE_START_0),
+      new DriveForwardDistance(drivetrain, -14.0),
+      new DriveForwardDistance(drivetrain, 7.5),
+      new ChargingStationAutoBalance(drivetrain)
+
+      ));
 
 
-    // autoCommandSelector.addOption(
-    //   "Right Side Score Cube and Move",
-    //   new SequentialCommandGroup(
+    autoCommandSelector.addOption(
+       "Center",
+       new SequentialCommandGroup(
     //     new ScoreCubeAutonomous(),
     //     new RotateAngle(drivetrain, 180),
-    //     new DriveForwardDistance(drivetrain, 225.081/12.0),
+         new DriveForwardDistance(drivetrain, 7.5),
     //     new RotateAngle(drivetrain, 11.55),
     //     new FloorPickupPositioning(),
     //     new ToggleGrabberNGo(),
@@ -146,7 +184,9 @@ public class RobotContainer {
     //     new DriveForwardDistance(drivetrain, 170.0/12),
     //     new SecondShelfPositioning(),
     //     new ToggleGrabberNGo(),
-    //     new RotateAngle(drivetrain, 180)
+         new ChargingStationAutoBalance(drivetrain)
+       )
+    );
     // )
     // );
   

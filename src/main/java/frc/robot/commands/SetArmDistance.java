@@ -28,17 +28,19 @@ public class SetArmDistance extends CommandBase {
   public void initialize() {
     armStartTime = Timer.getFPGATimestamp();
     //arm.zeroArmSensor();
-    arm.setArmMotionMagic(armTarget);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    arm.setArmMotionMagic(armTarget);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    arm.stop();
+    // arm.stop();
   }
 
   private boolean isArmMotionMagicDone() {
@@ -46,11 +48,11 @@ public class SetArmDistance extends CommandBase {
     double error = armSensorDistance - armTarget*20*2048;
     System.out.println("Sensor ="+armSensorDistance + ", armTarget = " + (armTarget * 20 * 2048));
     double percentErr = Math.abs(error)/Math.abs(armTarget*20*2048);
-    if(percentErr < 0.01)  {
+    if(percentErr < .05)  {
       return true;
     }
     double timepassed = Timer.getFPGATimestamp() - armStartTime;
-    if (timepassed > 7) {
+    if (timepassed > 5.0) {
       return true;
     }
 

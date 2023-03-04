@@ -32,7 +32,7 @@ public class DriveForwardDistance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.setDriveMotionMagic(distance, 10000, 4000);
+    drivetrain.setDriveMotionMagic(distance, 6000, 2000);
   }
 
   // Called once the command ends or is interrupted.

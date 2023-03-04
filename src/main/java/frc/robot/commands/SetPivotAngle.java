@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 //import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Pivot;
@@ -11,7 +12,7 @@ import frc.robot.subsystems.Pivot;
 public class SetPivotAngle extends CommandBase {
   private final Pivot pivot;
   private final double pivotTarget;
-  //private double pivotStartTime;
+  private double pivotStartTime;
   /** Creates a new SetPivotAngle. */
   public SetPivotAngle(Pivot pivot, double pivotTarget) {
     this.pivot = pivot;
@@ -24,34 +25,39 @@ public class SetPivotAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-   // pivotStartTime = Timer.getFPGATimestamp();
+   pivotStartTime = Timer.getFPGATimestamp();
     // pivot.zeroPivotSensor();
-    pivot.setPivotMotionMagic(pivotTarget);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    pivot.setPivotMotionMagic(pivotTarget);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    pivot.stop();
+    // pivot.stop();
   }
 
   private boolean isPivotMotionMagicDone() {
     double pivotSensorAngle = pivot.getPivotPosition();
     double error = pivotSensorAngle - pivotTarget*80*2048;
-    System.out.println("Pivot sensor = " + pivotSensorAngle + ", pivotTarget= " + (pivotTarget*80*2048));
+    System.out.println("[isDone] Pivot sensor = " + pivotSensorAngle + ", pivotTarget= " + (pivotTarget*80*2048));
     double percentErr = Math.abs(error)/Math.abs(pivotTarget*80*2048);
-    if (percentErr < 0.01) {
+    // double timePassed = Timer.getFPGATimestamp() - pivotStartTime;
+    if (percentErr < .05){
+      return true;
+    }
+    double timePassed = Timer.getFPGATimestamp() - pivotStartTime;
+    if (timePassed > 5.0){
       return true;
     }
 
-    // double timePassed = Timer.getFPGATimestamp() - pivotStartTime;
-    // if (timePassed > 7) {   /////check the time needed for this
-    //   return true;
-    // }
+    
+    
 
     System.out.println("Pivot Percent Error= " + percentErr);// + ",time passed= " + timePassed);
     
@@ -61,8 +67,8 @@ public class SetPivotAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean isDone = isPivotMotionMagicDone();
-    return isDone;
+    boolean isPivotMotionDone = isPivotMotionMagicDone();
+    return isPivotMotionDone;
     // return false;
   }
 }

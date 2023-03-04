@@ -19,10 +19,13 @@ import frc.robot.Constants;
 public class Pivot extends SubsystemBase {
   // private final WPI_TalonFX pivotMotor;
   private final TalonFX pivotMotor;
+  // private double _currentPosition;
+  // private Boolean isManualPivotDone = false;
+
   /** Creates a new Pivot. */
   public Pivot() {
     pivotMotor = new TalonFX(Constants.PIVOT_MOTOR);
-
+    // isManualPivotDone = false;
     configmotor();
   }
   
@@ -61,19 +64,55 @@ public class Pivot extends SubsystemBase {
 
     }
     public void testPivot(double power) {
-      pivotMotor.set(ControlMode.PercentOutput, power);
-      double motorOutput = pivotMotor.getMotorOutputPercent();
-      //display motor power, velocity, and sensor position
+      
       StringBuilder pivotinfo = new StringBuilder();
-      pivotinfo.append("\tPIVOT Output Power: ");
-      pivotinfo.append(motorOutput);
-      pivotinfo.append("\tPIVOT Motor Velocity: ");
-      pivotinfo.append(pivotMotor.getSelectedSensorVelocity(Constants.PIVOT_kpIDLoopIDx));
-      pivotinfo.append("\tPIVOT SENSOR POSITION: ");
-      pivotinfo.append(pivotMotor.getSelectedSensorPosition(Constants.PIVOT_kpIDLoopIDx));
+
+      // this._currentPosition = pivotMotor.getSelectedSensorPosition(0);
+      // pivotinfo.append("Current Position: ");
+      // pivotinfo.append(this._currentPosition);
+      // pivotinfo.append(","+power);
+      // pivotinfo.append("\n");
+
+      // System.out.println("in testPivot: "+this._currentPosition);
+
+      // if(power > 0.1 && Math.abs(this._currentPosition) < Constants.PIVOT_MAX_ROTATION_LIMIT){
+      //   pivotMotor.set(ControlMode.PercentOutput, power);
+      //   pivotinfo.append("Current Position: ");
+      //   pivotinfo.append(this._currentPosition);
+      //   System.out.println("pivot UP");
+      //   isManualPivotDone = false;
+      // } else {
+      //   pivotMotor.set(ControlMode.PercentOutput,0);
+      //   isManualPivotDone = true;
+      // }
+      
+      // if(power < -0.1 && Math.abs(this._currentPosition) < Math.abs(Constants.PIVOT_MIN_ROTATION_LIMIT) ){
+      //   pivotMotor.set(ControlMode.PercentOutput, power);
+      //   isManualPivotDone = false;
+      // } else {
+      //   pivotinfo.append("Going Down");
+      //   pivotMotor.set(ControlMode.PercentOutput, 0);
+      //   System.out.println("pivot Down");
+      //   isManualPivotDone = true;
+      // }
+
+      //double motorOutput = pivotMotor.getMotorOutputPercent();
+      //display motor power, velocity, and sensor position
+
+      // pivotinfo.append("\tPIVOT Output Power: ");
+      // pivotinfo.append(motorOutput);
+      // pivotinfo.append("\tPIVOT Motor Velocity: ");
+      // pivotinfo.append(pivotMotor.getSelectedSensorVelocity(Constants.PIVOT_kpIDLoopIDx));
+      // pivotinfo.append("\tPIVOT SENSOR POSITION: ");
+      // pivotinfo.append(pivotMotor.getSelectedSensorPosition(Constants.PIVOT_kpIDLoopIDx));
+      pivotMotor.set(ControlMode.PercentOutput, power);
 
       System.out.println(pivotinfo.toString());
     }
+
+    // public Boolean isManualTestDone(){
+    //        return isManualPivotDone;
+    // }
 
     public void setPivotMotionMagic(double targetRotations) {
       double targetTicks = targetRotations * 80 * 2048;
@@ -105,6 +144,7 @@ public class Pivot extends SubsystemBase {
 
     public void zeroPivotSensor() {
       pivotMotor.setSelectedSensorPosition(0);
+     // _currentPosition = pivotMotor.getSelectedSensorPosition();
     }
 
 

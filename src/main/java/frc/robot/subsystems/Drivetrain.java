@@ -27,6 +27,8 @@ public class Drivetrain extends SubsystemBase {
 
     private Pigeon2 pigeon = new Pigeon2(Constants.PIGEON_CANID);
 
+    private int drivetrian_flip = 1;
+
     public Drivetrain() {
       configMotors();
      }
@@ -90,7 +92,7 @@ public void configMotors(){
   leftBack.setSelectedSensorPosition(0);
   rightBack.setSelectedSensorPosition(0);
   leftFront.setSensorPhase(false);
-  
+
   rightFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT);
   leftFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT);
 
@@ -100,7 +102,7 @@ public void configMotors(){
 }
 
 public void arcadeDrive(double throttle, double rotation) {
-    drivetrain.arcadeDrive(-throttle, rotation);
+    drivetrain.arcadeDrive(drivetrian_flip * -throttle, rotation);
 
 }
 
@@ -130,6 +132,10 @@ public double getPitch() {
 
 public double getRoll() {
   return pigeon.getRoll();
+}
+
+public void invert_drivetrain() {
+  drivetrian_flip *= -1;
 }
 
 public void setDriveMotionMagic(double distance, double maxvelocity, double maxAcceleration) {
@@ -174,10 +180,10 @@ public void setTurnMotionMagic(double distance, double maxvelocity, double maxAc
 }
 
 public void stopTurnMotionMagic() {
-leftFront.set(ControlMode.PercentOutput, 0);
-rightFront.set(ControlMode.PercentOutput, 0);
+  leftFront.set(ControlMode.PercentOutput, 0);
+  rightFront.set(ControlMode.PercentOutput, 0);
 
-drivetrain.setSafetyEnabled(true);
+  drivetrain.setSafetyEnabled(true);
 }
 
 @Override
@@ -205,7 +211,7 @@ public void zeroDrivetrainEncoders() {
 }
 
   
-  }
+}
 
 
 

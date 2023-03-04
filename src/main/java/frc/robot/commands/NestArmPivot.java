@@ -4,27 +4,28 @@
 
 package frc.robot.commands;
 
-
-
-
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
+// import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Pivot;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class FloorPickupPositioning extends SequentialCommandGroup {
-  private Arm arm;
-  private Pivot pivot;
-  /** Creates a new FloorPickup. */
-  public FloorPickupPositioning() {
+public class NestArmPivot extends SequentialCommandGroup {
+  // Grabber grabber;
+  Pivot pivot;
+  Arm arm;
+  /** Creates a new NestArmPivot */
+  public NestArmPivot(Pivot pivot, Arm arm) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new SetPivotAngle(pivot, Constants.PIVOT_ANGLE_START_0),
-      new SetArmDistance(arm, Constants.ARM_GROUND_21)
+      // new InstantCommand(() -> grabber.toggle()),
+      new SetArmDistance(arm, Constants.ARM_FULLY_RETRACTED_0),
+      new SetPivotAngle(pivot, Constants.PIVOT_ANGLE_START_0)
     );
   }
 }

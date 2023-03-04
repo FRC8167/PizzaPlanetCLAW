@@ -59,8 +59,30 @@ public class Arm extends SubsystemBase {
     }
 
 
-    public void testArm(double power) {
-      armMotor.set(ControlMode.PercentOutput, power);
+    public void testArm(double power) {  //MANUAL ARM CONTROL
+      // if (armMotor.getMotorOutputPercent() > 0.0) {  //extending
+      //   if (armMotor.getSelectedSensorPosition() >= Constants.ARM_MAX_EXTENSION_TICKS) {
+      //     armMotor.set(ControlMode.PercentOutput, 0);
+      //   }
+      //   else {
+      //     armMotor.set(ControlMode.PercentOutput, power);
+      //   }
+      // }
+      // if (armMotor.getMotorOutputPercent() < 0.0)  {    //retracting
+      //   if (armMotor.getSelectedSensorPosition()<= Constants.ARM_MIN_RETRACTION_TICKS) {
+      //     armMotor.set(ControlMode.PercentOutput, 0);
+      //  } 
+      //  else {
+      //   } 
+      // }
+        if (power < 0 && armMotor.getSelectedSensorPosition() <= 0.05)
+        {
+          armMotor.set(ControlMode.PercentOutput, 0);
+        }
+        else {
+          armMotor.set(ControlMode.PercentOutput, power);
+        }
+
       double motorOutput = armMotor.getMotorOutputPercent();
       StringBuilder info = new StringBuilder();
       info.append("\tOutput Power: ");
