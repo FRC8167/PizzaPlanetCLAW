@@ -26,7 +26,8 @@ public class Drivetrain extends SubsystemBase {
     private DifferentialDrive drivetrain = new DifferentialDrive(leftFront, rightFront);
 
     private Pigeon2 pigeon = new Pigeon2(Constants.PIGEON_CANID);
-
+    private double snail = 1.0;
+    private boolean isSlow;
     private int drivetrian_flip = 1;
 
     public Drivetrain() {
@@ -102,12 +103,12 @@ public void configMotors(){
 }
 
 public void arcadeDrive(double throttle, double rotation) {
-    drivetrain.arcadeDrive(drivetrian_flip * -throttle, rotation);
+    drivetrain.arcadeDrive(snail * drivetrian_flip * -throttle, snail * rotation);
 
 }
 
 public void tankDrive(double leftSpeed, double rightSpeed) {
-    drivetrain.tankDrive(-leftSpeed, -rightSpeed);
+    drivetrain.tankDrive(snail * -leftSpeed, snail * -rightSpeed);
 }
 
 public void driveForward(double speed) {  
@@ -136,6 +137,23 @@ public double getRoll() {
 
 public void invert_drivetrain() {
   drivetrian_flip *= -1;
+}
+
+public void snailSpeed() {
+  snail = 0.6;
+  isSlow = true;
+}
+public void normalSpeed() {
+  snail = 1;
+  isSlow = false;
+}
+public void toggleSnailSpeed() {
+  if (isSlow) {
+    normalSpeed();
+  } 
+  else {
+    snailSpeed();
+  }
 }
 
 public void setDriveMotionMagic(double distance, double maxvelocity, double maxAcceleration) {

@@ -40,8 +40,8 @@ public class Pivot extends SubsystemBase {
     pivotMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, Constants.PIVOT_pidLoopTimeout);
     pivotMotor.selectProfileSlot(0, 0);
 
-    pivotMotor.config_kF(0, .046, Constants.PIVOT_pidLoopTimeout);
-    pivotMotor.config_kP(0, 0.049, Constants.PIVOT_pidLoopTimeout);
+    pivotMotor.config_kF(0, .046, Constants.PIVOT_pidLoopTimeout); 
+    pivotMotor.config_kP(0, 0.049, Constants.PIVOT_pidLoopTimeout); //.049
     pivotMotor.config_kI(0, 0, Constants.PIVOT_pidLoopTimeout);
     pivotMotor.config_kD(0, 0, Constants.PIVOT_pidLoopTimeout);
 

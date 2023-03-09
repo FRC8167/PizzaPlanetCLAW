@@ -52,7 +52,7 @@ public class SetArmDistance extends CommandBase {
       return true;
     }
     double timepassed = Timer.getFPGATimestamp() - armStartTime;
-    if (timepassed > 5.0) {
+    if (timepassed > 3.5) {
       return true;
     }
 
