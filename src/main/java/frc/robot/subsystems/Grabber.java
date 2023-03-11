@@ -11,41 +11,46 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Grabber extends SubsystemBase {
-  private boolean isOpen;
-  private DoubleSolenoid grabberPiston;
-  /** Creates a new Grabber. */
-  public Grabber() {
-    grabberPiston = 
-    new DoubleSolenoid(0, PneumaticsModuleType.CTREPCM, Constants.SOLENOID_ID1, Constants.SOLENOID_ID2);
-    isOpen = false;
-  }
-
-  //Methods for controlling the state of the double solenoid
-
-  public void openGrabber() {
-    grabberPiston.set(Value.kForward);
-    isOpen = true;
-  }
-
-  public void closeGrabber() {
-    grabberPiston.set(Value.kReverse);
-    isOpen = false;
-  }
-
-  public void toggle() {
-    //Toggle the stat of bothh solenoids and gripper
-    if (isOpen) {
-      closeGrabber();
-    } else {
-      openGrabber();
+    private final DoubleSolenoid grabberPiston;
+    
+    private boolean isOpen;
+    
+    /** Creates a new Grabber Subsystem. */
+    public Grabber() {
+        grabberPiston = new DoubleSolenoid(
+            0, 
+            PneumaticsModuleType.CTREPCM, 
+            Constants.SOLENOID_ID1, 
+            Constants.SOLENOID_ID2
+        );
+        
+        isOpen = false;
     }
-  }
-
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
-
-  
+    
+    // Methods for controlling the state of the double solenoid
+    /** Opens the grabber (fairly self explanatory) */
+    public void openGrabber() {
+        grabberPiston.set(Value.kForward);
+        isOpen = true;
+    }
+    
+    /** Closes the grabber (also very self explanatory) */
+    public void closeGrabber() {
+        grabberPiston.set(Value.kReverse);
+        isOpen = false;
+    }
+    
+    /**
+     * Toggles the state of the grabber. (i.e. if it's open, it gets closed, and vice versa)
+     */
+    public void toggleGrabber() {
+        if (isOpen) {
+            closeGrabber();
+        } else {
+            openGrabber();
+        }
+    }
+    
+    @Override
+    public void periodic() {}
 }

@@ -17,126 +17,86 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
-  private final TalonFX armMotor;
-  /** Creates a new Arm. */
-  public Arm() {
-    armMotor = new TalonFX(Constants.ARM_MOTOR);
-    configmotor();
-  }
-
-  private void configmotor(){
-    armMotor.configFactoryDefault();
-    armMotor.setNeutralMode(NeutralMode.Brake);
-    armMotor.configNeutralDeadband(0.1, 30);
+    private final TalonFX armMotor;
     
-    armMotor.configClosedloopRamp(1.0);
-    armMotor.configOpenloopRamp(0.0);
-    armMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, Constants.ARM_pidLoopTimeout);
-    armMotor.selectProfileSlot(0, 0);
-
-    armMotor.config_kF(0, .046, Constants.ARM_pidLoopTimeout);
-    armMotor.config_kP(0, 0.049, Constants.ARM_pidLoopTimeout);
-    armMotor.config_kI(0, 0, Constants.ARM_pidLoopTimeout);
-    armMotor.config_kD(0, 0, Constants.ARM_pidLoopTimeout);
-
-    armMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.ARM_pidLoopTimeout);
-    armMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.ARM_pidLoopTimeout);
-
-    armMotor.setInverted(true);
-    armMotor.setSensorPhase(false);
-
-    armMotor.configNominalOutputForward(0, Constants.ARM_pidLoopTimeout);
-    armMotor.configNominalOutputReverse(0, Constants.ARM_pidLoopTimeout);
-    armMotor.configPeakOutputForward(1, Constants.ARM_pidLoopTimeout);
-    armMotor.configPeakOutputReverse(-1, Constants.ARM_pidLoopTimeout);
-
-    armMotor.configMotionCruiseVelocity(Constants.armCruiseVelocity, Constants.ARM_pidLoopTimeout);
-    armMotor.configMotionAcceleration(Constants.armAcceleration, Constants.ARM_pidLoopTimeout);
-
-    //Zero the encoder
-    armMotor.setSelectedSensorPosition(0, 0, Constants.ARM_pidLoopTimeout);
-
+    /** Creates a new Arm. */
+    public Arm() {
+        armMotor = new TalonFX(Constants.ARM_MOTOR);
+        configmotor();
     }
-
-
-    public void testArm(double power) {  //MANUAL ARM CONTROL
-      // if (armMotor.getMotorOutputPercent() > 0.0) {  //extending
-      //   if (armMotor.getSelectedSensorPosition() >= Constants.ARM_MAX_EXTENSION_TICKS) {
-      // /    armMotor.set(ControlMode.PercentOutput, 0);
-      //   }
-      //   else {
-          //armMotor.set(ControlMode.PercentOutput, power);
-      //   }
-      // }
-      // if (armMotor.getMotorOutputPercent() < 0.0)  {    //retracting
-      //   if (armMotor.getSelectedSensorPosition()<= Constants.ARM_MIN_RETRACTION_TICKS) {
-      //     armMotor.set(ControlMode.PercentOutput, 0);
-      //  } 
-      //  else {
-      //   } 
-      // }
-      // double counts = armMotor.getSelectedSensorPosition();
-      // System.out.println(counts);
-      // // System.out.println("Power: " + power);
+    
+    private void configmotor() {
+        armMotor.configFactoryDefault();
+        armMotor.setNeutralMode(NeutralMode.Brake);
+        armMotor.configNeutralDeadband(0.1, 30);
+        
+        armMotor.configClosedloopRamp(1.0);
+        armMotor.configOpenloopRamp(0.5);
+        
+        armMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, Constants.ARM_pidLoopTimeout);
+        armMotor.selectProfileSlot(0, 0);
+        
+        armMotor.config_kF(0, .046, Constants.ARM_pidLoopTimeout);
+        armMotor.config_kP(0, 0.049, Constants.ARM_pidLoopTimeout);
+        armMotor.config_kI(0, 0, Constants.ARM_pidLoopTimeout);
+        armMotor.config_kD(0, 0, Constants.ARM_pidLoopTimeout);
+        
+        armMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.ARM_pidLoopTimeout);
+        armMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.ARM_pidLoopTimeout);
+        
+        armMotor.setInverted(true);
+        armMotor.setSensorPhase(false);
+        
+        armMotor.configNominalOutputForward(0, Constants.ARM_pidLoopTimeout);
+        armMotor.configNominalOutputReverse(0, Constants.ARM_pidLoopTimeout);
+        armMotor.configPeakOutputForward(1, Constants.ARM_pidLoopTimeout);
+        armMotor.configPeakOutputReverse(-1, Constants.ARM_pidLoopTimeout);
+        
+        armMotor.configMotionCruiseVelocity(Constants.armCruiseVelocity, Constants.ARM_pidLoopTimeout);
+        armMotor.configMotionAcceleration(Constants.armAcceleration, Constants.ARM_pidLoopTimeout);
+        
+        //Zero the encoder
+        armMotor.setSelectedSensorPosition(0, 0, Constants.ARM_pidLoopTimeout);
+    }
+    
+    public void testArm(double power) {
         if (power < 0 && armMotor.getSelectedSensorPosition() <= 0.0 ) {
-          armMotor.set(ControlMode.PercentOutput, 0);
+            armMotor.set(ControlMode.PercentOutput, 0);
         }
-        else if (power > 0 && armMotor.getSelectedSensorPosition() >= 250000) 
-        {
-          armMotor.set(ControlMode.PercentOutput, 0);
-        //   // System.out.println("power: " + power);
-        }
-        else {
+        else if (power > 0 && armMotor.getSelectedSensorPosition() >= 250000) {
+            armMotor.set(ControlMode.PercentOutput, 0);
+        } else {
           armMotor.set(ControlMode.PercentOutput, power);
         }
-
-      // double motorOutput = armMotor.getMotorOutputPercent();
-      // StringBuilder info = new StringBuilder();
-      // info.append("\tOutput Power: ");
-      // info.append(motorOutput);
-      // info.append("\tMotor Velocity: ");
-      // info.append(armMotor.getSelectedSensorVelocity(0));
-      // info.append("\tSENSOR POSITION: ");
-      // info.append(armMotor.getSelectedSensorPosition(0));
-
-      // System.out.println(info.toString());
     }
-
-    public void setArmMotionMagic(double targetRotations) {
-      double targetTicks = targetRotations * 20 * 2048;
-      armMotor.set(TalonFXControlMode.MotionMagic, targetTicks);
-      //double retract holdOutput = 0.13;  //uncomment if needed
-      //armMotor.set(TalonFXControlMode.MotionMagic, targetTicks, DemandType.ArbitraryFeedForward, retractHoldOutput);
-      //Display PID Commanded Target and Resulting Error
-      // StringBuilder moreinfo = new StringBuilder();
-      // moreinfo.append("\tCommanded Target:  ");
-      // moreinfo.append(targetTicks);
-      // moreinfo.append("\tPID Error ");
-      // moreinfo.append(armMotor.getClosedLoopError());
-      // moreinfo.append("\tSENSOR POSITION:  ");
-      // moreinfo.append(armMotor.getSelectedSensorPosition());
-
-      // System.out.println(moreinfo.toString());
     
-    }
-    public boolean armIsFullyExtend() {
+    public boolean isFullyExtended() {
+        // TODO: should this be less than
+        // TODO: isnt there a constant for this?
       return armMotor.getSelectedSensorPosition() < 350000;
     }
-
-    public void stop(){
-      armMotor.set(ControlMode.PercentOutput, 0);
+    
+    public void setArmMotionMagic(double targetRotations) {
+        // TODO: what is this "20" here for?
+        double targetTicks = targetRotations * 20 * 2048;
+        
+        armMotor.set(TalonFXControlMode.MotionMagic, targetTicks);
     }
-
+    
+    public void stop() {
+        armMotor.set(ControlMode.PercentOutput, 0);
+    }
+    
     public double getArmPosition() {
-      return armMotor.getSelectedSensorPosition(0);
+        return armMotor.getSelectedSensorPosition(0);
     }
-
+    
     public void zeroArmSensor() {
-      armMotor.setSelectedSensorPosition(0);
+        armMotor.setSelectedSensorPosition(0);
     }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+    
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
 }
