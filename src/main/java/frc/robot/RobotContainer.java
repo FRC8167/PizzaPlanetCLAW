@@ -115,7 +115,7 @@ public class RobotContainer {
 
     //Operator Buttons
     //GRABBER TOGGLE
-    operatorController.leftStick().onTrue(new InstantCommand(() -> grabber.toggle()));
+    operatorController.leftStick().onTrue(new InstantCommand(() -> grabber.toggleGrabber()));
 
     //EXTEND/RETRACT TELESCOPING ARM
     operatorController.a().onTrue(new SetArmDistance(arm, 12.5));  //extend
