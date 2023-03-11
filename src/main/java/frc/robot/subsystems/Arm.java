@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 // import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -29,8 +30,7 @@ public class Arm extends SubsystemBase {
     armMotor.configNeutralDeadband(0.1, 30);
     
     armMotor.configClosedloopRamp(1.0);
-    armMotor.configOpenloopRamp(0.5);
-
+    armMotor.configOpenloopRamp(0.0);
     armMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, Constants.ARM_pidLoopTimeout);
     armMotor.selectProfileSlot(0, 0);
 
@@ -62,10 +62,10 @@ public class Arm extends SubsystemBase {
     public void testArm(double power) {  //MANUAL ARM CONTROL
       // if (armMotor.getMotorOutputPercent() > 0.0) {  //extending
       //   if (armMotor.getSelectedSensorPosition() >= Constants.ARM_MAX_EXTENSION_TICKS) {
-      //     armMotor.set(ControlMode.PercentOutput, 0);
+      // /    armMotor.set(ControlMode.PercentOutput, 0);
       //   }
       //   else {
-      //     armMotor.set(ControlMode.PercentOutput, power);
+          //armMotor.set(ControlMode.PercentOutput, power);
       //   }
       // }
       // if (armMotor.getMotorOutputPercent() < 0.0)  {    //retracting
@@ -75,24 +75,31 @@ public class Arm extends SubsystemBase {
       //  else {
       //   } 
       // }
-        if (power < 0 && armMotor.getSelectedSensorPosition() <= 0.05)
+      // double counts = armMotor.getSelectedSensorPosition();
+      // System.out.println(counts);
+      // // System.out.println("Power: " + power);
+        if (power < 0 && armMotor.getSelectedSensorPosition() <= 0.0 ) {
+          armMotor.set(ControlMode.PercentOutput, 0);
+        }
+        else if (power > 0 && armMotor.getSelectedSensorPosition() >= 250000) 
         {
           armMotor.set(ControlMode.PercentOutput, 0);
+        //   // System.out.println("power: " + power);
         }
         else {
           armMotor.set(ControlMode.PercentOutput, power);
         }
 
-      double motorOutput = armMotor.getMotorOutputPercent();
-      StringBuilder info = new StringBuilder();
-      info.append("\tOutput Power: ");
-      info.append(motorOutput);
-      info.append("\tMotor Velocity: ");
-      info.append(armMotor.getSelectedSensorVelocity(0));
-      info.append("\tSENSOR POSITION: ");
-      info.append(armMotor.getSelectedSensorPosition(0));
+      // double motorOutput = armMotor.getMotorOutputPercent();
+      // StringBuilder info = new StringBuilder();
+      // info.append("\tOutput Power: ");
+      // info.append(motorOutput);
+      // info.append("\tMotor Velocity: ");
+      // info.append(armMotor.getSelectedSensorVelocity(0));
+      // info.append("\tSENSOR POSITION: ");
+      // info.append(armMotor.getSelectedSensorPosition(0));
 
-      System.out.println(info.toString());
+      // System.out.println(info.toString());
     }
 
     public void setArmMotionMagic(double targetRotations) {
@@ -101,16 +108,19 @@ public class Arm extends SubsystemBase {
       //double retract holdOutput = 0.13;  //uncomment if needed
       //armMotor.set(TalonFXControlMode.MotionMagic, targetTicks, DemandType.ArbitraryFeedForward, retractHoldOutput);
       //Display PID Commanded Target and Resulting Error
-      StringBuilder moreinfo = new StringBuilder();
-      moreinfo.append("\tCommanded Target:  ");
-      moreinfo.append(targetTicks);
-      moreinfo.append("\tPID Error ");
-      moreinfo.append(armMotor.getClosedLoopError());
-      moreinfo.append("\tSENSOR POSITION:  ");
-      moreinfo.append(armMotor.getSelectedSensorPosition());
+      // StringBuilder moreinfo = new StringBuilder();
+      // moreinfo.append("\tCommanded Target:  ");
+      // moreinfo.append(targetTicks);
+      // moreinfo.append("\tPID Error ");
+      // moreinfo.append(armMotor.getClosedLoopError());
+      // moreinfo.append("\tSENSOR POSITION:  ");
+      // moreinfo.append(armMotor.getSelectedSensorPosition());
 
-      System.out.println(moreinfo.toString());
+      // System.out.println(moreinfo.toString());
     
+    }
+    public boolean armIsFullyExtend() {
+      return armMotor.getSelectedSensorPosition() < 350000;
     }
 
     public void stop(){

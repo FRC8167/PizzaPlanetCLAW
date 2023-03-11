@@ -43,10 +43,10 @@ public static final int PLAYMAKER_CONTROLLER = 2;
 
 //Arm Extender Constants
 public static final int ARM_pidLoopTimeout = 30;
-public static final double armCruiseVelocity = 15000; //10000;
-public static final double armAcceleration = 7500; //5000
+public static final double armCruiseVelocity = 30000; //10000;
+public static final double armAcceleration = 25000; //5000
 
-public static final double ARM_POWER = 0.4;  //used for MANUAL control of arm
+public static final double ARM_POWER = 0.6;  //used for MANUAL control of arm
 public static final double ARM_FULLY_RETRACTED_0 = 0.0;  //inches
 public static final double ARM_SUBSTATION_8 = 8.0;  //inches pickup cone/cube from substation
 public static final double ARM_SHELF1_21 = 21.0;   //inches score cube level 1 shelf

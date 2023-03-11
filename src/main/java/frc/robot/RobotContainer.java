@@ -8,6 +8,8 @@ package frc.robot;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ChargingStationAutoBalance;
 import frc.robot.commands.DriveForwardDistance;
+import frc.robot.commands.ManualExtend;
+//import frc.robot.commands.ManualExtend;
 import frc.robot.commands.NestArmPivot;
 import frc.robot.commands.Pole1Positioning;
 import frc.robot.commands.Pole2Positioning;
@@ -80,11 +82,13 @@ public class RobotContainer {
     configureBindings();
     addAutoCommands();
     SmartDashboard.putData(autoCommandSelector);
+    SmartDashboard.putNumber("arm_pos", arm.getArmPosition());
+    SmartDashboard.putNumber("pivot_pos", pivot.getPivotPosition());
 
 
     drivetrain.setDefaultCommand(new ArcadeDrive(
       drivetrain, 
-      () -> driverController.getLeftY()*.75,
+      () -> driverController.getLeftY()*.80,
       () -> driverController.getRightX()*-0.6  //change as needed
     )
     );
@@ -117,15 +121,17 @@ public class RobotContainer {
     operatorController.a().onTrue(new SetArmDistance(arm, 12.5));  //extend
     operatorController.b().onTrue(new SetArmDistance(arm, 0));  //retract
     //MANUAL ZERO ARM SENSOR
-    operatorController.x().onTrue(new InstantCommand(() -> arm.zeroArmSensor()));
+    // operatorController.x().onTrue(new InstantCommand(() -> arm.zeroArmSensor()));
     // //MANUAL CONTROL OF TELESCOPING ARM
-    operatorController.leftTrigger().whileTrue(new StartEndCommand(() -> arm.testArm(-Constants.ARM_POWER), () -> arm.stop()));
-    operatorController.rightTrigger().whileTrue(new StartEndCommand(() -> arm.testArm(Constants.ARM_POWER), () -> arm.stop()));
-    //AUTO ROTATE PIVOT MOTOR
+    operatorController.leftTrigger().whileTrue(new ManualExtend(arm, -Constants.ARM_POWER)); //retract
+    operatorController.rightTrigger().whileTrue(new ManualExtend(arm, Constants.ARM_POWER)); //extend
+    // operatorController.leftTrigger().whileTrue(new StartEndCommand(() -> arm.testArm(-Constants.ARM_POWER), () -> arm.stop()));
+    // operatorController.rightTrigger().whileTrue(new StartEndCommand(() -> arm.testArm(Constants.ARM_POWER), () -> arm.stop()));
+    // //AUTO ROTATE PIVOT MOTOR
     // operatorController.start().onTrue(new SetPivotAngle(pivot, 30.0));  //raise arm (degrees)
     // operatorController.back().onTrue(new SetPivotAngle(pivot, 0.0));  //return arm to base position
     //MANUAL ZERO PIVOT SENSOR
-    operatorController.y().onTrue(new InstantCommand(() -> pivot.zeroPivotSensor()));
+    // operatorController.y().onTrue(new InstantCommand(() -> pivot.zeroPivotSensor()));
     operatorController.leftBumper().whileTrue(new StartEndCommand(() -> pivot.testPivot(-Constants.PIVOT_POWER), () -> pivot.stop()));
     operatorController.rightBumper().whileTrue(new StartEndCommand(() -> pivot.testPivot(Constants.PIVOT_POWER), () -> pivot.stop()));
     //MANUAL CONTROL OF PIVOT MOTOR
@@ -145,7 +151,7 @@ public class RobotContainer {
 
 
     //PLAYMAKER CONTROLLER
-    playmakerController.povLeft().onTrue(new SetPivotAngle(pivot, 30.0));  //raise arm (degrees)
+    playmakerController.povLeft().onTrue(new SetPivotAngle(pivot, 50.0));  //raise arm (degrees)
     playmakerController.povRight().onTrue(new SetPivotAngle(pivot, 0.0));  //return arm to base position
     playmakerController.a().onTrue(new Shelf1Positioning(arm, pivot));
     playmakerController.b().onTrue(new Shelf2Positioning(arm, pivot));
@@ -187,12 +193,12 @@ public class RobotContainer {
         new SetPivotAngle(pivot, 80),
         new SetArmDistance(arm, Constants.ARM_SHELF1_21),
         new InstantCommand(()-> grabber.openGrabber()),
-        new SetPivotAngle(pivot, 85),
+        new SetPivotAngle(pivot, 80),
         new SetArmDistance(arm, Constants.ARM_FULLY_RETRACTED_0),
         new InstantCommand(()-> grabber.closeGrabber()),
         new ParallelCommandGroup(
           new SetPivotAngle(pivot, 0),
-          new DriveForwardDistance(drivetrain, -15.5)
+          new DriveForwardDistance(drivetrain, -17)
         )
         ));
     autoCommandSelector.addOption(
@@ -201,12 +207,12 @@ public class RobotContainer {
         new SetPivotAngle(pivot, 80),
         new SetArmDistance(arm, Constants.ARM_SHELF1_21),
         new InstantCommand(()-> grabber.openGrabber()),
-        new SetPivotAngle(pivot, 85),
+        new SetPivotAngle(pivot, 80),
         new SetArmDistance(arm, Constants.ARM_FULLY_RETRACTED_0),
         new InstantCommand(()-> grabber.closeGrabber()),
         new ParallelCommandGroup(
           new SetPivotAngle(pivot, 0),
-          new DriveForwardDistance(drivetrain, -13)
+          new DriveForwardDistance(drivetrain, -15)
         ),
         new RotateAngle(drivetrain, 180),
         new InstantCommand(()-> grabber.openGrabber()),
