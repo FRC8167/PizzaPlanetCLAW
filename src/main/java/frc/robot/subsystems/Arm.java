@@ -16,13 +16,14 @@ import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
     private final WPI_TalonFX armMotor;
+    
     /** Creates a new Arm. */
     public Arm() {
         armMotor = new WPI_TalonFX(Constants.ARM_MOTOR);
         configmotor();
     }
     
-    private void configmotor(){
+    private void configmotor() {
         armMotor.configFactoryDefault();
         armMotor.setNeutralMode(NeutralMode.Brake);
         armMotor.configNeutralDeadband(0.1, 30);
@@ -58,36 +59,16 @@ public class Arm extends SubsystemBase {
     
     public void testArm(double power) {
         armMotor.set(ControlMode.PercentOutput, power);
-        double motorOutput = armMotor.getMotorOutputPercent();
-        StringBuilder info = new StringBuilder();
-        info.append("\tOutput Power: ");
-        info.append(motorOutput);
-        info.append("\tMotor Velocity: ");
-        info.append(armMotor.getSelectedSensorVelocity(0));
-        info.append("\tSENSOR POSITION: ");
-        info.append(armMotor.getSelectedSensorPosition(0));
-        
-        System.out.println(info.toString());
     }
     
     public void setArmMotionMagic(double targetRotations) {
+        // TODO: what is this "20" here for?
         double targetTicks = targetRotations * 20 * 2048;
-        armMotor.set(TalonFXControlMode.MotionMagic, targetTicks);
-        //double retract holdOutput = 0.13;    //uncomment if needed
-        //armMotor.set(TalonFXControlMode.MotionMagic, targetTicks, DemandType.ArbitraryFeedForward, retractHoldOutput);
-        //Display PID Commanded Target and Resulting Error
-        StringBuilder moreinfo = new StringBuilder();
-        moreinfo.append("\tCommanded Target:    ");
-        moreinfo.append(targetTicks);
-        moreinfo.append("\tPID Error ");
-        moreinfo.append(armMotor.getClosedLoopError());
-        moreinfo.append("\tSENSOR POSITION:    ");
-        moreinfo.append(armMotor.getSelectedSensorPosition());
         
-        System.out.println(moreinfo.toString());
+        armMotor.set(TalonFXControlMode.MotionMagic, targetTicks);
     }
     
-    public void stop(){
+    public void stop() {
         armMotor.set(ControlMode.PercentOutput, 0);
     }
     
