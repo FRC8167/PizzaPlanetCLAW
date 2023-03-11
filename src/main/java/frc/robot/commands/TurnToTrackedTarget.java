@@ -15,7 +15,7 @@ public class TurnToTrackedTarget extends CommandBase {
     double visionTargetAngle;
     /** Creates a new TurnToTrackedTarget. */
     
-    public TurnToTrackedTarget(Drivetrain drivetrain, Vision vision, double visionKP ) {
+    public TurnToTrackedTarget(Drivetrain drivetrain, Vision vision) {
         // Use addRequirements() here to declare subsystem dependencies.
         this.drivetrain = drivetrain;
         this.vision = vision;

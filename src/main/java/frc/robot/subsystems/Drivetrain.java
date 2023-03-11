@@ -169,6 +169,7 @@ public class Drivetrain extends SubsystemBase {
         snail = 0.6;
         isSlow = true;
     }
+    
     public void normalSpeed() {
         snail = 1;
         isSlow = false;
@@ -187,16 +188,16 @@ public class Drivetrain extends SubsystemBase {
         // disable safety so that the motors let us do what we want
         drivetrain.setSafetyEnabled(false);
         
-        // configure the velocity and acceleration of the motors with the given values
-        rightFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT_MS);
-        leftFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT_MS);
+        // // configure the velocity and acceleration of the motors with the given values
+        // rightFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT_MS);
+        // leftFront.configMotionCruiseVelocity(Constants.DRIVE_CRUISE_VELOCITY, Constants.DRIVE_PID_TIMEOUT_MS);
         
-        rightFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT_MS);
-        leftFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT_MS);
+        // rightFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT_MS);
+        // leftFront.configMotionAcceleration(Constants.DRIVE_ACCELERATION, Constants.DRIVE_PID_TIMEOUT_MS);
         
-        // set the encoder positions to 0 so we dont have to worry about it
-        leftFront.getSensorCollection().setIntegratedSensorPosition(0, Constants.DRIVE_PID_TIMEOUT_MS);
-        leftFront.getSensorCollection().setIntegratedSensorPosition(0, Constants.DRIVE_PID_TIMEOUT_MS);
+        // // set the encoder positions to 0 so we dont have to worry about it
+        // leftFront.getSensorCollection().setIntegratedSensorPosition(0, Constants.DRIVE_PID_TIMEOUT_MS);
+        // leftFront.getSensorCollection().setIntegratedSensorPosition(0, Constants.DRIVE_PID_TIMEOUT_MS);
         
         // actually set the motion magic to the given distance
         // TODO: why is this negative??
@@ -204,28 +205,44 @@ public class Drivetrain extends SubsystemBase {
         leftFront.set(ControlMode.MotionMagic, -distance);
     }
 
-public void stopDriveMotionMagic() {
-  leftFront.set(ControlMode.PercentOutput, 0);
-  rightFront.set(ControlMode.PercentOutput, 0);
+    public void stopDriveMotionMagic() {
+        leftFront.set(ControlMode.PercentOutput, 0);
+        rightFront.set(ControlMode.PercentOutput, 0);
 
-  drivetrain.setSafetyEnabled(true);
+        drivetrain.setSafetyEnabled(true);
+    }
+    
+    public void setTurnMotionMagic(double distance, double maxvelocity, double maxAcceleration) {
+        drivetrain.setSafetyEnabled(false);
+        
+        rightFront.set(ControlMode.MotionMagic, distance); // opposite direction since we are turning
+        leftFront.set(ControlMode.MotionMagic, -distance);
+    }
+    
+    public void stopTurnMotionMagic() {
+        leftFront.set(ControlMode.PercentOutput, 0);
+        rightFront.set(ControlMode.PercentOutput, 0);
+
+        drivetrain.setSafetyEnabled(true);
+    }
+    
+    @Override
+    public void periodic() {}
+    
+    public boolean isDriveMagicMotionDone(double distanceTicks) {
+        double sensorDistance = rightFront.getSelectedSensorPosition(0);
+        double percentError = 100*(-distanceTicks - sensorDistance) / -distanceTicks;
+        return (distanceTicks <14000 && percentError <5) || percentError <1;  //where did the 14000 come from?
+    }
+    
+    public double getLeadRightSensorPosition() {
+        return rightFront.getSelectedSensorPosition(0);
+    }
+    
+    public void zeroDrivetrainEncoders() {
+        leftFront.setSelectedSensorPosition(0);
+        leftBack.setSelectedSensorPosition(0);
+        rightFront.setSelectedSensorPosition(0);
+        rightBack.setSelectedSensorPosition(0);
+    }
 }
-
-@Override
-public void periodic() {
-
-}
-
-public boolean isDriveMagicMotionDone(double distanceTicks) {
-  double sensorDistance = rightFront.getSelectedSensorPosition(0);
-  double percentError = 100*(-distanceTicks - sensorDistance) / -distanceTicks;
-  return (distanceTicks <14000 && percentError <5) || percentError <1;  //where did the 14000 come from?
-}
-  
-  }
-
-
-
-
- 
-
