@@ -43,8 +43,8 @@ public static final int PLAYMAKER_CONTROLLER = 2;
 
 //Arm Extender Constants
 public static final int ARM_pidLoopTimeout = 30;
-public static final double armCruiseVelocity = 30000; //10000;
-public static final double armAcceleration = 25000; //5000
+public static final double armCruiseVelocity = 12000; //10000;
+public static final double armAcceleration = 5500; //5000
 
 public static final double ARM_POWER = 0.6;  //used for MANUAL control of arm
 public static final double ARM_FULLY_RETRACTED_0 = 0.0;  //inches

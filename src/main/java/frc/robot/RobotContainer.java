@@ -146,9 +146,9 @@ public class RobotContainer {
     driverController.a().whileTrue(new TurnToTrackedTarget(drivetrain, vision));
     driverController.leftBumper().whileTrue(new ChargingStationAutoBalance(drivetrain));
     driverController.x().onTrue(new InstantCommand(() -> drivetrain.invert_drivetrain()));
-    driverController.b().onTrue(new InstantCommand(()-> drivetrain.toggleSnailSpeed()));
-    
-
+    driverController.rightTrigger().onTrue(new InstantCommand(()-> drivetrain.toggleSnailSpeed()));
+    driverController.rightTrigger().onFalse(new InstantCommand(()-> drivetrain.toggleSnailSpeed()));
+  
 
     //PLAYMAKER CONTROLLER
     playmakerController.povLeft().onTrue(new SetPivotAngle(pivot, 50.0));  //raise arm (degrees)

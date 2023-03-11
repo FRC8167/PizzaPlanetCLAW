@@ -78,10 +78,10 @@ public class Arm extends SubsystemBase {
       // double counts = armMotor.getSelectedSensorPosition();
       // System.out.println(counts);
       // // System.out.println("Power: " + power);
-        if (power < 0 && armMotor.getSelectedSensorPosition() <= 0.0 ) {
+        if (power < 0 && armMotor.getSelectedSensorPosition() <= 1000.0 ) {
           armMotor.set(ControlMode.PercentOutput, 0);
         }
-        else if (power > 0 && armMotor.getSelectedSensorPosition() >= 250000) 
+        else if (power > 0 && armMotor.getSelectedSensorPosition() >= 295000.0) 
         {
           armMotor.set(ControlMode.PercentOutput, 0);
         //   // System.out.println("power: " + power);
