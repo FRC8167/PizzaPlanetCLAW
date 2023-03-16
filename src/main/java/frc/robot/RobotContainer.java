@@ -10,9 +10,9 @@ import frc.robot.commands.ChargingStationAutoBalance;
 import frc.robot.commands.DriveForwardDistance;
 import frc.robot.commands.ManualExtend;
 //import frc.robot.commands.ManualExtend;
-import frc.robot.commands.NestArmPivot;
-import frc.robot.commands.Pole1Positioning;
-import frc.robot.commands.Pole2Positioning;
+// import frc.robot.commands.NestArmPivot;
+// import frc.robot.commands.Pole1Positioning;
+// import frc.robot.commands.Pole2Positioning;
 // import frc.robot.commands.ManualPivot;
 //import frc.robot.commands.DriveForwardDistance;
 //import frc.robot.commands.NestArmPivot;
@@ -25,10 +25,10 @@ import frc.robot.commands.RotateAngle;
 import frc.robot.commands.SetArmDistance;
 import frc.robot.commands.SetPivotAngle;
 //import frc.robot.commands.Shelf1Parallel;
-import frc.robot.commands.Shelf1Positioning;
+// import frc.robot.commands.Shelf1Positioning;
 //import frc.robot.commands.Shelf1Positioning;
-import frc.robot.commands.Shelf2Positioning;
-import frc.robot.commands.SubstationPositioning;
+// import frc.robot.commands.Shelf2Positioning;
+// import frc.robot.commands.SubstationPositioning;
 import frc.robot.commands.TurnToTrackedTarget;
 //import frc.robot.commands.Shelf1Positioning;
 //import frc.robot.commands.Shelf2Positioning;
@@ -74,7 +74,7 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER);
   private final CommandXboxController operatorController = new CommandXboxController(Constants.OPERATOR_CONTROLLER);
-  private final CommandXboxController playmakerController = new CommandXboxController(Constants.PLAYMAKER_CONTROLLER);
+  // private final CommandXboxController playmakerController = new CommandXboxController(Constants.PLAYMAKER_CONTROLLER);
 //
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -128,8 +128,8 @@ public class RobotContainer {
     // operatorController.leftTrigger().whileTrue(new StartEndCommand(() -> arm.testArm(-Constants.ARM_POWER), () -> arm.stop()));
     // operatorController.rightTrigger().whileTrue(new StartEndCommand(() -> arm.testArm(Constants.ARM_POWER), () -> arm.stop()));
     // //AUTO ROTATE PIVOT MOTOR
-    // operatorController.start().onTrue(new SetPivotAngle(pivot, 30.0));  //raise arm (degrees)
-    // operatorController.back().onTrue(new SetPivotAngle(pivot, 0.0));  //return arm to base position
+    operatorController.x().onTrue(new SetPivotAngle(pivot, 50.0));  //raise arm (degrees)
+    operatorController.y().onTrue(new SetPivotAngle(pivot, 0.0));  //return arm to base position
     //MANUAL ZERO PIVOT SENSOR
     // operatorController.y().onTrue(new InstantCommand(() -> pivot.zeroPivotSensor()));
     operatorController.leftBumper().whileTrue(new StartEndCommand(() -> pivot.testPivot(-Constants.PIVOT_POWER), () -> pivot.stop()));
@@ -151,14 +151,14 @@ public class RobotContainer {
   
 
     //PLAYMAKER CONTROLLER
-    playmakerController.povLeft().onTrue(new SetPivotAngle(pivot, 50.0));  //raise arm (degrees)
-    playmakerController.povRight().onTrue(new SetPivotAngle(pivot, 0.0));  //return arm to base position
-    playmakerController.a().onTrue(new Shelf1Positioning(arm, pivot));
-    playmakerController.b().onTrue(new Shelf2Positioning(arm, pivot));
-    playmakerController.x().onTrue(new Pole1Positioning(arm, pivot));
-    playmakerController.y().onTrue(new Pole2Positioning(arm, pivot));
-    playmakerController.leftBumper().onTrue(new SubstationPositioning(arm, pivot));
-    playmakerController.rightBumper().onTrue(new NestArmPivot(pivot, arm));
+    // playmakerController.povLeft().onTrue(new SetPivotAngle(pivot, 50.0));  //raise arm (degrees)
+    // playmakerController.povRight().onTrue(new SetPivotAngle(pivot, 0.0));  //return arm to base position
+    // playmakerController.a().onTrue(new Shelf1Positioning(arm, pivot));
+    // playmakerController.b().onTrue(new Shelf2Positioning(arm, pivot));
+    // playmakerController.x().onTrue(new Pole1Positioning(arm, pivot));
+    // playmakerController.y().onTrue(new Pole2Positioning(arm, pivot));
+    // playmakerController.leftBumper().onTrue(new SubstationPositioning(arm, pivot));
+    // playmakerController.rightBumper().onTrue(new NestArmPivot(pivot, arm));
 
 
 
@@ -223,6 +223,25 @@ public class RobotContainer {
 
 
         ));
+        // autoCommandSelector.addOption(
+        //   "Auto Pole Center",
+        //     new SequentialCommandGroup(
+        //     new SetPivotAngle(pivot, 85),
+        //     new SetArmDistance(arm, Constants.ARM_POLE1_21),
+        //     new InstantCommand(()-> grabber.openGrabber()),
+        //     new SetPivotAngle(pivot, 85),
+        //     new SetArmDistance(arm, Constants.ARM_FULLY_RETRACTED_0),
+        //     new InstantCommand(()-> grabber.closeGrabber()),
+            
+        //     new ParallelCommandGroup(
+        //       new SetPivotAngle(pivot, Constants.PIVOT_ANGLE_START_0),
+        //       new DriveForwardDistance(drivetrain, -7.5)
+        //     ),
+        //     // new DriveForwardDistance(drivetrain, -14.0),
+        //     // new DriveForwardDistance(drivetrain, 7.5),
+        //     new ChargingStationAutoBalance(drivetrain)
+      
+        //     ));
   
   }
   

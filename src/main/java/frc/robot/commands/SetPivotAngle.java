@@ -48,7 +48,7 @@ public class SetPivotAngle extends CommandBase {
     System.out.println("[isDone] Pivot sensor = " + pivotSensorAngle + ", pivotTarget= " + (pivotTarget*80*2048));
     double percentErr = Math.abs(error)/Math.abs(pivotTarget*80*2048);
     // double timePassed = Timer.getFPGATimestamp() - pivotStartTime;
-    if (percentErr < .05){
+    if (percentErr < .075){
       return true;
     }
     double timePassed = Timer.getFPGATimestamp() - pivotStartTime;
